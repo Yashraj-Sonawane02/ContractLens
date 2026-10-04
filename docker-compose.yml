@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: contractlens_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME=ContractLens
+      - API_V1_STR=/api/v1
+      - SECRET_KEY=contractlens_prod_secret_key_change_in_env_file
+    volumes:
+      - ./backend/contractlens.db:/app/contractlens.db
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: contractlens_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always

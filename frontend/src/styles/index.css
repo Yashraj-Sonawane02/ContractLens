@@ -1,0 +1,252 @@
+/* ==========================================================================
+   CONTRACTLENS — EXECUTIVE FORMAL LEGAL COMPLIANCE SYSTEM
+   Institutional Legal-Tech Interface (Indian Statutory Audit Standards)
+   Palette: Executive Slate (#0b1120), Deep Navy (#070b14), Brushed Legal Gold (#c5a880) & Crisp Ivory Text
+   ========================================================================== */
+
+:root {
+  /* Colors - Executive Institutional Navy & Legal Gold */
+  --bg-dark: #070b14;
+  --bg-surface: #0b1120;
+  --bg-card: rgba(11, 17, 32, 0.94);
+  --bg-card-hover: rgba(17, 26, 47, 0.96);
+  --bg-glass: rgba(255, 255, 255, 0.02);
+
+  /* Gold & Metallic Legal Accents */
+  --accent-gold: #c5a880;
+  --accent-gold-bright: #d4af37;
+  --accent-gold-subtle: rgba(197, 168, 128, 0.12);
+  --border-gold: rgba(197, 168, 128, 0.28);
+  --border-slate: rgba(255, 255, 255, 0.08);
+  --border-slate-hover: rgba(255, 255, 255, 0.14);
+
+  /* Risk Badges (Formal Legal Standard) */
+  --risk-critical-bg: rgba(136, 19, 55, 0.25);
+  --risk-critical-text: #fda4af;
+  --risk-critical-border: #881337;
+
+  --risk-high-bg: rgba(146, 64, 14, 0.25);
+  --risk-high-text: #fde047;
+  --risk-high-border: #92400E;
+
+  --risk-medium-bg: rgba(29, 78, 216, 0.25);
+  --risk-medium-text: #93c5fd;
+  --risk-medium-border: #1d4ed8;
+
+  --risk-low-bg: rgba(4, 120, 87, 0.25);
+  --risk-low-text: #6ee7b7;
+  --risk-low-border: #047857;
+
+  /* Typography */
+  --font-heading: 'Cinzel', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Neutral Text */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-gold: #c5a880;
+
+  /* UI Tokens */
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 4px;
+  --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.45);
+  --shadow-gold: 0 2px 10px rgba(197, 168, 128, 0.15);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(197, 168, 128, 0.03) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-dark) 0%, #04070d 100%);
+  background-attachment: fixed;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.heading-gold {
+  color: var(--accent-gold-bright);
+}
+
+.text-gold {
+  color: var(--accent-gold);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Glass & Formal Cards */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-slate);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.glass-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-2px);
+}
+
+.card-gold-accent {
+  border-top: 3px solid var(--accent-gold);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #c5a880 0%, #9e825a 100%);
+  color: #0b132b;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-gold-bright);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.22);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.84rem;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-slate);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-gold);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Risk Badges */
+.badge-risk {
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition-fast);
+}
+
+.badge-risk.CRITICAL {
+  background: var(--risk-critical-bg);
+  color: var(--risk-critical-text);
+  border: 1px solid var(--risk-critical-border);
+}
+
+.badge-risk.HIGH {
+  background: var(--risk-high-bg);
+  color: var(--risk-high-text);
+  border: 1px solid var(--risk-high-border);
+}
+
+.badge-risk.MEDIUM {
+  background: var(--risk-medium-bg);
+  color: var(--risk-medium-text);
+  border: 1px solid var(--risk-medium-border);
+}
+
+.badge-risk.LOW {
+  background: var(--risk-low-bg);
+  color: var(--risk-low-text);
+  border: 1px solid var(--risk-low-border);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(197, 168, 128, 0.25);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(197, 168, 128, 0.45);
+}
+
+/* Smooth Animations */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-fade-in {
+  animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.pulse-status {
+  animation: pulseSubtle 2.5s infinite ease-in-out;
+}
+
