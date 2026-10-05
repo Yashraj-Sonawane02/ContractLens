@@ -31,9 +31,11 @@ venv/
 env/
 .env
 
-# Database
+# Database & Storage
 *.db
 *.sqlite3
+encrypted_storage/
+backend/encrypted_storage/
 
 # Node dependencies & build
 node_modules/

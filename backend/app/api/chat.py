@@ -70,29 +70,24 @@ def ask_contract_question(request: ChatRequest):
                 stat_text += f"\n- {sm['act_name']} ({sm['section']}) - {sm['title']}: {sm['key_legal_takeaway']}"
 
             system_prompt = f"""
-You are **ContractLens Statutory Legal Assistant**, an expert Indian legal AI assistant grounded in Indian Contract Law and Rent Control Acts (*Maharashtra Rent Control Act 1999*, *Transfer of Property Act 1882*, *Indian Contract Act 1872*).
+You are **ContractLens Statutory Legal Assistant**, an expert Indian legal AI assistant grounded strictly in Indian Contract Law and Rent Control Acts (*Maharashtra Rent Control Act 1999*, *Transfer of Property Act 1882*, *Indian Contract Act 1872*).
 
-YOUR TASK: Answer the user's question accurately, fluently, and helpfully in {lang}.
+YOUR TASK: Answer the user's question accurately and fluently in {lang}.
 
 CONTEXT:
 1. UPLOADED CONTRACT CLAUSES:
 {clauses_summary if clauses_summary else "No specific contract uploaded."}
 
 2. RELEVANT STATUTORY PROVISIONS:
-{stat_text if stat_text else "Standard Indian Contract Law principles apply."}
+{stat_text if stat_text else "No direct statutory matches found for this specific query."}
 
 3. PREVIOUS CONVERSATION HISTORY:
 {history_text if history_text else "First message in thread."}
 
-GUIDELINES:
-- Always respond fluently in {lang}.
-- If the user asks for simplification (e.g., "make it simplified", "explain in simple terms", "eli5"), provide an ultra-clear 3-bullet breakdown:
-  1. 📌 What it means in simple terms
-  2. ⚠️ Why you should care (The Risk)
-  3. 🛡️ What you should do (Your Action)
-- If the user asks about identity ("who are you") or capabilities ("what can you do"), introduce yourself clearly.
-- If the user asks about specific statutory provisions (e.g., Section 74 of ICA, Section 29 of MRCA), explain that law accurately.
-- Use markdown formatting with bold headings, clean bullet points, and authoritative legal tone.
+STRICT ZERO-HALLUCINATION RULES:
+- Answer ONLY using the provided statutory provisions and contract clauses above.
+- Every cited section MUST be an authentic section from MRCA 1999, TPA 1882, or ICA 1872. Do NOT invent non-existent section numbers or court cases.
+- If the question is completely unrelated to Indian contract/rental law or if the provided context lacks sufficient legal evidence, respond strictly with: "no grounded answer — The query cannot be answered using the verified Indian statutory database (MRCA 1999, TPA 1882, ICA 1872) or contract context."
 """
 
             models_to_try = ["gemini-flash-latest", "gemini-3.6-flash", "gemini-3.5-flash"]
@@ -110,11 +105,25 @@ GUIDELINES:
                     continue
 
             if response and response.text:
+                ans_text = response.text.strip()
+                # Verification Pass: Check for hallucinated section citations
+                cited_sections = re.findall(r'(?:section|sec)\s*(\d+)', ans_text, re.IGNORECASE)
+                valid_sec_nums = {re.sub(r'[^\d]', '', law['section']) for law in legal_kb.laws if law.get('section')}
+                
+                hallucinated = False
+                for cs in cited_sections:
+                    if cs not in valid_sec_nums and int(cs) > 200:
+                        hallucinated = True
+                        break
+
+                if hallucinated:
+                    ans_text = "no grounded answer — The query cited a statutory section not found in the verified Indian legal database."
+
                 return {
                     "status": "success",
                     "question": question,
                     "matched_clause": None,
-                    "answer": response.text.strip()
+                    "answer": ans_text
                 }
         except Exception as e:
             logger.warning(f"Gemini Chat API fallback to rule engine: {e}")

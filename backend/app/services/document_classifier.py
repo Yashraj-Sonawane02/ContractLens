@@ -1,51 +1,58 @@
 import re
 from typing import Dict, Any
 
-DOCUMENT_PATTERNS = {
-    "Rental & Lease Agreement": [
-        r"\brent(al)?\b", r"\blease\b", r"\blandlord\b", r"\blessor\b", r"\blessee\b",
-        r"\btenant\b", r"\bsecurity deposit\b", r"\bpremises\b", r"\bdemised property\b"
-    ],
-    "Employment & HR Agreement": [
-        r"\bemployment\b", r"\bemployer\b", r"\bemployee\b", r"\bsalary\b", r"\bcompensation\b",
-        r"\bprobation\b", r"\bnon-compete\b", r"\bappointment letter\b", r"\bnotice period\b"
-    ],
-    "Loan & Financial Agreement": [
-        r"\bloan\b", r"\bborrower\b", r"\blender\b", r"\bpromissory note\b", r"\binterest rate\b",
-        r"\bprincipal amount\b", r"\bcollateral\b", r"\bemi\b", r"\bfinancial facility\b"
-    ],
-    "Business & Commercial Contract": [
-        r"\bnon-disclosure\b", r"\bnda\b", r"\bvendor\b", r"\bservice agreement\b", r"\bpartnership\b",
-        r"\bindemnity\b", r"\bconfidential information\b", r"\bstatement of work\b", r"\bsow\b"
-    ],
-    "Consumer & E-Commerce Terms": [
-        r"\bterms of service\b", r"\bterms of use\b", r"\bprivacy policy\b", r"\bconsumer\b",
-        r"\brefund policy\b", r"\buser account\b", r"\be-commerce\b", r"\bend user\b"
-    ]
+SUPPORTED_RENTAL_PATTERNS = [
+    r"\brent(al)?\b", r"\blease\b", r"\blicensee\b", r"\blicensor\b", r"\blandlord\b",
+    r"\blessor\b", r"\blessee\b", r"\btenant\b", r"\bsecurity deposit\b", r"\bpremises\b",
+    r"\bleave and license\b", r"\bmaharashtra rent control\b", r"\bflat\b", r"\bapartment\b",
+    r"\bdemised property\b", r"\bmonthly fee\b", r"\block-in\b", r"\beviction\b", r"\bstatutory\b",
+    r"\btransfer of property\b", r"\bindian contract act\b", r"\bstamp duty\b", r"\bsublet\b"
+]
+
+UNSUPPORTED_DOMAINS = {
+    "Medical & Healthcare Report": [r"\bdoctor\b", r"\bpatient\b", r"\bhospital\b", r"\bdiagnosis\b", r"\bprescription\b", r"\bmedical\b"],
+    "Financial Invoice / Receipt": [r"\binvoice\b", r"\bvat\b", r"\bgst\b", r"\bbill to\b", r"\bpayment receipt\b", r"\btax invoice\b"],
+    "Software & Programming Code": [r"\bfunction\b", r"\bimport\b", r"\bconst\b", r"\bclass\b", r"\bdef\b", r"\breturn\b", r"\bvar\b"],
+    "Resume / Curriculum Vitae": [r"\bresume\b", r"\bcurriculum vitae\b", r"\beducation\b", r"\bwork experience\b", r"\bskills\b"],
+    "Unrelated Non-Legal Document": [r"\brecipe\b", r"\bnovel\b", r"\bstory\b", r"\bweather\b", r"\bnews\b"]
 }
 
 def detect_document_type(text: str) -> Dict[str, Any]:
     text_lower = text.lower()
-    scores = {doc_type: 0 for doc_type in DOCUMENT_PATTERNS}
 
-    for doc_type, patterns in DOCUMENT_PATTERNS.items():
-        for pattern in patterns:
-            matches = re.findall(pattern, text_lower)
-            scores[doc_type] += len(matches)
+    # 1. Check for Unsupported Non-Contract Domains
+    for domain_name, patterns in UNSUPPORTED_DOMAINS.items():
+        domain_matches = sum(len(re.findall(p, text_lower)) for p in patterns)
+        if domain_matches >= 3 and not any(re.search(p, text_lower) for p in [r"\brent\b", r"\blease\b", r"\blicensee\b"]):
+            return {
+                "detected_type": domain_name,
+                "is_supported_domain": False,
+                "confidence": "high",
+                "error_message": f"Unsupported Document Domain ({domain_name}): ContractLens is exclusively engineered for Maharashtra Leave & License Agreements, Leases, and Property Contracts under Indian Law. This file cannot be audited."
+            }
 
-    sorted_types = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-    best_match, max_score = sorted_types[0]
+    # 2. Check for Supported Rental & Property Legal Keywords
+    rental_score = sum(len(re.findall(p, text_lower)) for p in SUPPORTED_RENTAL_PATTERNS)
 
-    if max_score == 0:
-        best_match = "General Legal Contract"
-        confidence = "low"
-    elif max_score >= 5:
-        confidence = "high"
+    if rental_score >= 3:
+        return {
+            "detected_type": "Maharashtra Leave & License / Property Agreement",
+            "is_supported_domain": True,
+            "confidence": "high",
+            "score": rental_score
+        }
+    elif rental_score >= 1:
+        return {
+            "detected_type": "General Property Contract",
+            "is_supported_domain": True,
+            "confidence": "medium",
+            "score": rental_score
+        }
     else:
-        confidence = "medium"
-
-    return {
-        "detected_type": best_match,
-        "confidence": confidence,
-        "scores": scores
-    }
+        # Zero or insufficient rental contract keywords — Refuse Analysis
+        return {
+            "detected_type": "Invalid / Non-Contract Document",
+            "is_supported_domain": False,
+            "confidence": "low",
+            "error_message": "Unsupported Document Domain: ContractLens is exclusively engineered for Maharashtra Leave & License Agreements, Residential/Commercial Leases, and Property Agreements under Indian Law. The uploaded document lacks contract covenants and cannot be audited."
+        }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { History, FileText, ArrowRight } from 'lucide-react';
+import { History, FileText, ArrowRight, Trash2 } from 'lucide-react';
 import api from '../services/api';
 
 export default function HistoryPage({ onSelectReport }) {
@@ -22,36 +22,48 @@ export default function HistoryPage({ onSelectReport }) {
     }
   };
 
+  const handleDeleteRecord = async (e, recordId) => {
+    e.stopPropagation();
+    try {
+      await api.delete(`/analysis/history/${recordId}`);
+      setHistoryList(prev => prev.filter(item => item.id !== recordId));
+    } catch (err) {
+      alert("Failed to delete history record.");
+    }
+  };
+
   if (loading) {
     return (
-      <div style={{ maxWidth: '900px', margin: '60px auto', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+      <div style={{ maxWidth: '800px', margin: '60px auto', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
         Retrieving saved statutory audit history...
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '36px auto', padding: '0 24px 80px' }} className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+    <div style={{ maxWidth: '880px', margin: '36px auto', padding: '0 24px 80px' }} className="animate-fade-in">
+      
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', fontFamily: 'var(--font-heading)' }}>
-            <History style={{ color: 'var(--accent-gold)', width: '22px', height: '22px' }} />
+          <h1 style={{ fontSize: '1.4rem', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 700, color: 'var(--text-main)' }}>
+            <History style={{ color: 'var(--accent-navy)', width: '22px', height: '22px' }} />
             Statutory Audit Log
           </h1>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px', display: 'block' }}>
             Archived contract analysis reports under your account
           </span>
         </div>
 
-        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-          Total Saved: <strong style={{ color: 'var(--accent-gold)' }}>{historyList.length} Reports</strong>
+        <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+          Total Saved: <strong style={{ color: 'var(--accent-navy)' }}>{historyList.length} Reports</strong>
         </div>
       </div>
 
       {historyList.length === 0 ? (
-        <div className="glass-card" style={{ padding: '48px', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <FileText style={{ width: '40px', height: '40px', color: 'var(--text-subtle)', margin: '0 auto 12px' }} />
-          <h3 style={{ fontSize: '1.1rem', color: '#ffffff', marginBottom: '4px', fontFamily: 'var(--font-heading)' }}>No Saved Audit Records</h3>
+        <div className="minimal-card" style={{ padding: '48px', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <FileText style={{ width: '36px', height: '36px', color: 'var(--text-subtle)', margin: '0 auto 12px' }} />
+          <h3 style={{ fontSize: '1.05rem', color: 'var(--text-main)', marginBottom: '4px', fontWeight: 700 }}>No Saved Audit Records</h3>
           <p style={{ fontSize: '0.84rem' }}>Executed statutory audit reports will be archived here automatically when signed in.</p>
         </div>
       ) : (
@@ -59,37 +71,40 @@ export default function HistoryPage({ onSelectReport }) {
           {historyList.map(item => (
             <div
               key={item.id}
-              className="glass-card"
+              className="minimal-card"
               onClick={() => onSelectReport(item.analysis_result)}
               style={{
                 padding: '16px 20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                cursor: 'pointer',
-                transition: 'var(--transition)'
+                cursor: 'pointer'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                {/* Health Score Circle */}
                 <div style={{
-                  width: '46px',
-                  height: '46px',
+                  width: '44px',
+                  height: '44px',
                   borderRadius: '50%',
-                  border: `3px solid ${item.health_score >= 80 ? '#6ee7b7' : item.health_score >= 60 ? '#fde047' : '#fda4af'}`,
+                  border: `2px solid ${item.health_score >= 75 ? 'var(--risk-low-border)' : item.health_score >= 50 ? 'var(--risk-high-border)' : 'var(--risk-critical-border)'}`,
+                  background: item.health_score >= 75 ? 'var(--risk-low-bg)' : item.health_score >= 50 ? 'var(--risk-high-bg)' : 'var(--risk-critical-bg)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 800,
-                  fontSize: '1rem',
-                  color: item.health_score >= 80 ? '#6ee7b7' : item.health_score >= 60 ? '#fde047' : '#fda4af',
+                  fontSize: '0.96rem',
+                  color: item.health_score >= 75 ? 'var(--risk-low-text)' : item.health_score >= 50 ? 'var(--risk-high-text)' : 'var(--risk-critical-text)',
                   fontFamily: 'var(--font-mono)'
                 }}>
                   {item.health_score}
                 </div>
 
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.98rem', color: '#ffffff' }}>{item.document_name}</div>
-                  <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', gap: '12px' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.96rem', color: 'var(--text-main)' }}>
+                    {item.document_name}
+                  </div>
+                  <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', gap: '10px' }}>
                     <span>{item.document_type}</span>
                     <span>•</span>
                     <span>{item.created_at}</span>
@@ -99,12 +114,22 @@ export default function HistoryPage({ onSelectReport }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ display: 'flex', gap: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
                   {item.critical_count > 0 && <span className="badge-risk CRITICAL">{item.critical_count} CRITICAL</span>}
                   {item.high_count > 0 && <span className="badge-risk HIGH">{item.high_count} HIGH</span>}
                 </div>
-                <ArrowRight style={{ width: '18px', height: '18px', color: 'var(--accent-gold)' }} />
+
+                <button
+                  onClick={(e) => handleDeleteRecord(e, item.id)}
+                  className="btn-minimal"
+                  title="Delete Log"
+                  style={{ padding: '6px', border: 'none' }}
+                >
+                  <Trash2 style={{ width: '15px', height: '15px', color: 'var(--text-subtle)' }} />
+                </button>
+
+                <ArrowRight style={{ width: '16px', height: '16px', color: 'var(--accent-navy)' }} />
               </div>
             </div>
           ))}

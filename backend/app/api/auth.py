@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from typing import Optional
 from app.db.database import get_db
 from app.models.models import User
 from app.schemas.auth_schemas import UserCreate, UserLogin, UserResponse, Token
@@ -22,6 +23,15 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
     return user
+
+def get_current_user_optional(authorization: Optional[str] = Header(None), db: Session = Depends(get_db)) -> Optional[User]:
+    if not authorization:
+        return None
+    token = authorization.replace("Bearer ", "").strip()
+    email = decode_access_token(token)
+    if not email:
+        return None
+    return db.query(User).filter(User.email == email).first()
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 def register_user(user_in: UserCreate, db: Session = Depends(get_db)):

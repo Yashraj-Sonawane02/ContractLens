@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
 import LegalExplorerModal from './components/LegalExplorerModal';
+import EmpiricalBenchmarkModal from './components/EmpiricalBenchmarkModal';
 import LandingPage from './pages/LandingPage';
 import HistoryPage from './pages/HistoryPage';
 import RiskDashboard from './components/RiskDashboard';
 import { authAPI } from './services/api';
 import api from './services/api';
-import { Sparkles, Shield, Cpu, Lock, CheckCircle2 } from 'lucide-react';
+import { Cpu, CheckCircle2 } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isLegalExplorerOpen, setIsLegalExplorerOpen] = useState(false);
+  const [isBenchmarkOpen, setIsBenchmarkOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('landing');
   const [analysisResult, setAnalysisResult] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
@@ -35,7 +37,7 @@ export default function App() {
 
   const handleStartAnalysis = async (config) => {
     setAnalyzing(true);
-    setAnalysisStage('Uploading contract document...');
+    setAnalysisStage('Encrypting and uploading contract document...');
 
     try {
       const formData = new FormData();
@@ -44,8 +46,9 @@ export default function App() {
       formData.append('domains', JSON.stringify(config.domains));
 
       const token = localStorage.getItem('contractlens_token');
+      const customHeaders = { 'Content-Type': 'multipart/form-data' };
       if (token) {
-        formData.append('authorization', `Bearer ${token}`);
+        customHeaders['Authorization'] = `Bearer ${token}`;
       }
 
       setAnalysisStage('Extracting document text & structures...');
@@ -60,7 +63,7 @@ export default function App() {
       setAnalysisStage('Statutory RAG Evaluation across 3 Acts (MRCA 1999 + TPA 1882 + ICA 1872)...');
 
       const response = await api.post('/analysis/run', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: customHeaders
       });
 
       setAnalysisResult(response.data);
@@ -83,6 +86,8 @@ export default function App() {
           setCurrentPage(page);
         }}
         currentPage={currentPage}
+        onOpenBenchmark={() => setIsBenchmarkOpen(true)}
+        onOpenLegalExplorer={() => setIsLegalExplorerOpen(true)}
       />
 
       <main style={{ flex: 1 }}>
@@ -94,8 +99,8 @@ export default function App() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'rgba(9, 13, 22, 0.9)',
-            backdropFilter: 'blur(16px)',
+            background: 'rgba(9, 13, 22, 0.85)',
+            backdropFilter: 'blur(12px)',
             zIndex: 1000,
             display: 'flex',
             alignItems: 'center',
@@ -104,35 +109,38 @@ export default function App() {
             textAlign: 'center',
             padding: '24px'
           }}>
-            <div className="glass-card" style={{ padding: '40px 48px', maxWidth: '520px' }}>
+            <div className="minimal-card" style={{ padding: '36px 44px', maxWidth: '480px', width: '100%' }}>
               <div style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '20px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                width: '52px',
+                height: '52px',
+                borderRadius: '16px',
+                background: 'var(--accent-navy)',
+                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 auto 20px',
-                boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)'
+                margin: '0 auto 16px',
+                boxShadow: 'var(--shadow-md)'
               }}>
-                <Cpu style={{ color: '#ffffff', width: '32px', height: '32px' }} />
+                <Cpu style={{ width: '26px', height: '26px' }} />
               </div>
 
-              <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Analyzing Legal Contract</h2>
-              <p style={{ fontSize: '0.88rem', color: '#818cf8', fontWeight: 600, marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '1.25rem', marginBottom: '6px', fontWeight: 700, color: 'var(--text-main)' }}>
+                Auditing Legal Contract
+              </h2>
+              <p style={{ fontSize: '0.86rem', color: 'var(--accent-navy)', fontWeight: 600, marginBottom: '20px' }}>
                 {analysisStage}
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#10b981' }} /> Fast Multi-Format Extraction
+                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#166534' }} /> Multi-Format Text Extraction
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#10b981' }} /> Contextual PII Privacy Redaction
+                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#166534' }} /> Contextual PII Privacy Redaction
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#10b981' }} /> Grounded RAG across MRCA 1999, TPA 1882 & ICA 1872
+                  <CheckCircle2 style={{ width: '14px', height: '14px', color: '#166534' }} /> Grounded RAG across MRCA 1999, TPA 1882 & ICA 1872
                 </div>
               </div>
             </div>
@@ -143,6 +151,7 @@ export default function App() {
           <LandingPage
             onStartAnalysis={handleStartAnalysis}
             onOpenLegalExplorer={() => setIsLegalExplorerOpen(true)}
+            onOpenBenchmark={() => setIsBenchmarkOpen(true)}
           />
         )}
 
@@ -177,15 +186,22 @@ export default function App() {
         onClose={() => setIsLegalExplorerOpen(false)}
       />
 
-      {/* Footer */}
+      {/* Empirical Benchmark Modal */}
+      {isBenchmarkOpen && (
+        <EmpiricalBenchmarkModal
+          onClose={() => setIsBenchmarkOpen(false)}
+        />
+      )}
+
+      {/* Minimal Footer */}
       <footer style={{
         textAlign: 'center',
-        padding: '24px',
-        borderTop: '1px solid var(--border-glass)',
-        color: 'var(--text-subtle)',
-        fontSize: '0.8rem'
+        padding: '20px',
+        borderTop: '1px solid var(--border-main)',
+        color: 'var(--text-muted)',
+        fontSize: '0.78rem'
       }}>
-        LeagLease V2 (ContractLens) — AI-assisted legal document intelligence grounded in Maharashtra Rent Control Act 1999, Transfer of Property Act 1882, and Indian Contract Act 1872.
+        ContractLens V2 — Statutory Legal AI SaaS grounded in Maharashtra Rent Control Act 1999, Transfer of Property Act 1882, and Indian Contract Act 1872.
       </footer>
     </div>
   );

@@ -5,6 +5,9 @@ from typing import List, Dict, Any
 
 LEGAL_DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "legal_db", "maharashtra_rental_laws.json")
 
+# Generic party words that shouldn't skew specific statutory matching
+GENERIC_TERMS = {"licensor", "licensee", "tenant", "landlord", "premises", "agreement", "contract", "shall", "party", "parties"}
+
 class LegalKnowledgeBase:
     def __init__(self, db_path: str = LEGAL_DB_PATH):
         self.db_path = db_path
@@ -18,12 +21,16 @@ class LegalKnowledgeBase:
         else:
             self.laws = []
 
-    def search_legal_context(self, query_text: str, topic: str = "", top_k: int = 2) -> List[Dict[str, Any]]:
+    def search_legal_context(self, query_text: str, topic: str = "", top_k: int = 3) -> List[Dict[str, Any]]:
         if not self.laws:
             return []
 
-        query_words = set(re.findall(r'\w+', query_text.lower()))
+        query_lower = query_text.lower()
+        query_words = set(re.findall(r'\w+', query_lower))
         results = []
+
+        # Extract explicit section numbers mentioned in query e.g. "Section 29", "Sec 11", "74"
+        sec_matches = set(re.findall(r'(?:section|sec|calum|kalam|kalum)?\s*(\d+)', query_lower))
 
         for law in self.laws:
             score = 0
@@ -31,25 +38,49 @@ class LegalKnowledgeBase:
             title_lower = law["title"].lower()
             act_lower = (law.get("act_name", "") + " " + law.get("act_short", "")).lower()
             sec_lower = law.get("section", "").lower()
+            sec_num = re.sub(r'[^\d]', '', sec_lower)
             keywords = [k.lower() for k in law.get("keywords", [])]
+
+            # Direct section number match (Highest Priority: +40)
+            if sec_num and sec_num in sec_matches:
+                score += 40
 
             for word in query_words:
                 if len(word) < 2:
                     continue
-                if word in sec_lower or word == sec_lower.replace("section", "").strip():
+                
+                # Filter out generic party words from giving massive boosts
+                if word in GENERIC_TERMS:
+                    score += 1
+                    continue
+
+                if word in sec_lower:
                     score += 15
                 if word in act_lower:
                     score += 5
-                if any(word in k or k in word for k in keywords):
-                    score += 5
+
+                # Keyword match weighting
+                for k in keywords:
+                    if k in GENERIC_TERMS:
+                        continue
+                    if word == k or (len(word) > 3 and word in k):
+                        score += 12
+                    elif k in word:
+                        score += 8
+
                 if word in title_lower:
-                    score += 3
+                    score += 6
                 if word in content_lower:
-                    score += 1
+                    score += 2
+
+            # Exact keyword phrase match boost
+            for k in keywords:
+                if k not in GENERIC_TERMS and k in query_lower:
+                    score += 20
 
             # Topic boost
             if topic and topic.lower() in law.get("domain", "").lower():
-                score += 2
+                score += 4
 
             if score > 0:
                 results.append({

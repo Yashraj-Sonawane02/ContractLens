@@ -1,123 +1,160 @@
-import React from 'react';
-import { Scale, FileCheck, User, LogOut, History } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Scale, FileText, User, LogOut, History, Sun, Moon, BookOpen } from 'lucide-react';
 
-export default function Navbar({ user, onOpenAuth, onLogout, onNavigate, currentPage }) {
+export default function Navbar({ 
+  user, 
+  onOpenAuth, 
+  onLogout, 
+  onNavigate, 
+  currentPage,
+  onOpenLegalExplorer
+}) {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('contractlens_theme') || 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('contractlens_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   return (
-    <header className="navbar-container" style={{
+    <header style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '14px 40px',
-      borderBottom: '1px solid var(--border-gold)',
-      background: 'rgba(9, 14, 26, 0.95)',
-      backdropFilter: 'blur(16px)',
+      padding: '12px 32px',
+      borderBottom: '1px solid var(--border-main)',
+      background: 'var(--bg-surface)',
       position: 'sticky',
       top: 0,
-      zIndex: 100
+      zIndex: 100,
+      transition: 'var(--transition)'
     }}>
-      {/* Brand Header */}
+      {/* Brand Logo & Title */}
       <div 
         onClick={() => onNavigate('landing')} 
-        style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}
+        style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
       >
         <div style={{
-          width: '38px',
-          height: '38px',
-          borderRadius: '6px',
-          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-          border: '1px solid var(--accent-gold)',
+          width: '32px',
+          height: '32px',
+          borderRadius: '8px',
+          background: 'var(--accent-navy)',
+          color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: 'var(--shadow-gold)'
+          boxShadow: 'var(--shadow-sm)'
         }}>
-          <Scale style={{ color: 'var(--accent-gold-bright)', width: '20px', height: '20px' }} />
+          <Scale style={{ width: '18px', height: '18px' }} />
         </div>
         <div>
           <h1 style={{ 
             fontFamily: 'var(--font-heading)', 
-            fontSize: '1.2rem', 
+            fontSize: '1.05rem', 
             margin: 0, 
             lineHeight: 1.1, 
-            letterSpacing: '0.04em',
-            color: '#ffffff'
+            letterSpacing: '-0.02em',
+            color: 'var(--text-main)',
+            fontWeight: 800
           }}>
-            CONTRACTLENS
+            ContractLens
           </h1>
-          <span style={{ fontSize: '0.7rem', color: 'var(--accent-gold)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Statutory Legal Compliance Engine
-          </span>
         </div>
       </div>
 
-      {/* Navigation Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      {/* Navigation & Controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        
         <button 
-          className="btn-secondary"
+          className="btn-minimal"
           onClick={() => onNavigate('landing')}
-          style={{ 
-            padding: '8px 18px', 
-            fontSize: '0.82rem',
-            borderColor: currentPage === 'landing' ? 'var(--accent-gold)' : 'var(--border-slate)'
+          style={{
+            borderColor: currentPage === 'landing' ? 'var(--accent-navy)' : 'var(--border-main)',
+            fontWeight: currentPage === 'landing' ? 700 : 500
           }}
         >
-          <FileCheck style={{ width: '15px', height: '15px', color: 'var(--accent-gold)' }} />
+          <FileText style={{ width: '14px', height: '14px' }} />
           New Audit
         </button>
 
-        {user && (
+        {onOpenLegalExplorer && (
           <button 
-            className="btn-secondary"
-            onClick={() => onNavigate('history')}
-            style={{ 
-              padding: '8px 18px', 
-              fontSize: '0.82rem',
-              borderColor: currentPage === 'history' ? 'var(--accent-gold)' : 'var(--border-slate)'
-            }}
+            className="btn-minimal"
+            onClick={onOpenLegalExplorer}
+            title="Search Maharashtra Statutory Database"
           >
-            <History style={{ width: '15px', height: '15px', color: '#93c5fd' }} />
-            Audit History
+            <BookOpen style={{ width: '14px', height: '14px' }} />
+            Statutes
           </button>
         )}
 
+        {user && (
+          <button 
+            className="btn-minimal"
+            onClick={() => onNavigate('history')}
+            style={{ 
+              borderColor: currentPage === 'history' ? 'var(--accent-navy)' : 'var(--border-main)',
+              fontWeight: currentPage === 'history' ? 700 : 500
+            }}
+          >
+            <History style={{ width: '14px', height: '14px' }} />
+            History
+          </button>
+        )}
+
+        {/* Theme Toggle Button */}
+        <button 
+          className="btn-minimal"
+          onClick={toggleTheme}
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          style={{ padding: '8px' }}
+        >
+          {theme === 'light' ? (
+            <Moon style={{ width: '15px', height: '15px', color: '#475569' }} />
+          ) : (
+            <Sun style={{ width: '15px', height: '15px', color: '#fbbf24' }} />
+          )}
+        </button>
+
         {user ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '6px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              borderRadius: '4px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid var(--border-slate)',
-              fontSize: '0.82rem'
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-subtle)',
+              fontSize: '0.82rem',
+              color: 'var(--text-main)',
+              fontWeight: 600
             }}>
-              <User style={{ width: '14px', height: '14px', color: 'var(--accent-gold)' }} />
-              <span style={{ fontWeight: 600, color: '#f1f5f9' }}>{user.full_name}</span>
+              <User style={{ width: '13px', height: '13px', color: 'var(--accent-navy)' }} />
+              <span>{user.full_name.split(' ')[0]}</span>
             </div>
             <button 
               onClick={onLogout}
               title="Logout"
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--border-slate)',
-                color: 'var(--text-muted)',
-                cursor: 'pointer',
-                padding: '7px 10px',
-                borderRadius: '4px',
-                transition: 'var(--transition)'
-              }}
+              className="btn-minimal"
+              style={{ padding: '8px' }}
             >
-              <LogOut style={{ width: '15px', height: '15px' }} />
+              <LogOut style={{ width: '14px', height: '14px', color: 'var(--text-muted)' }} />
             </button>
           </div>
         ) : (
           <button 
-            className="btn-primary"
+            className="btn-minimal btn-minimal-primary"
             onClick={onOpenAuth}
+            style={{ marginLeft: '4px' }}
           >
-            <User style={{ width: '14px', height: '14px' }} />
-            Sign In / Access
+            <User style={{ width: '13px', height: '13px' }} />
+            Sign In
           </button>
         )}
       </div>

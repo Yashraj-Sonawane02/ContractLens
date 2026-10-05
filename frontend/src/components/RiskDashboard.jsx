@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { ShieldAlert, AlertTriangle, FileText, Layers, Printer, BookOpen, Clock, Lock, MessageSquare } from 'lucide-react';
+import { 
+  ShieldAlert, AlertTriangle, FileText, Layers, Printer, BookOpen, Clock, 
+  MessageSquare, Download, Mail, Award, BarChart2, CheckCircle2, ArrowRight, GitCompare
+} from 'lucide-react';
 import ClauseCard from './ClauseCard';
 import RiskHeatmap from './RiskHeatmap';
 import ContractChat from './ContractChat';
 import ContractComparison from './ContractComparison';
+import NegotiationGenerator from './NegotiationGenerator';
+import EmpiricalBenchmarkModal from './EmpiricalBenchmarkModal';
+import api from '../services/api';
 
 export default function RiskDashboard({ data, onReset }) {
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'clauses', 'chat', 'compare'
+  const [activeTab, setActiveTab] = useState('top3'); // 'top3', 'all_clauses', 'negotiate', 'compare', 'chat'
   const [riskFilter, setRiskFilter] = useState('ALL');
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [downloadingDocx, setDownloadingDocx] = useState(false);
+  const [downloadingCert, setDownloadingCert] = useState(false);
+  const [isBenchmarkOpen, setIsBenchmarkOpen] = useState(false);
 
   if (!data) return null;
 
@@ -19,11 +29,18 @@ export default function RiskDashboard({ data, onReset }) {
     executive_summary,
     top_concerns,
     analyzed_clauses,
-    risk_heatmap,
     total_items_masked,
     processing_time_seconds,
     language
   } = data;
+
+  // Priority Sort Clauses: CRITICAL first, then HIGH, MEDIUM, LOW
+  const riskPriority = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
+  const sortedClauses = [...analyzed_clauses].sort((a, b) => {
+    return (riskPriority[b.risk_level] || 0) - (riskPriority[a.risk_level] || 0);
+  });
+
+  const top3Clauses = sortedClauses.slice(0, 3);
 
   const filteredClauses = analyzed_clauses.filter(c => {
     if (riskFilter === 'ALL') return true;
@@ -31,249 +48,387 @@ export default function RiskDashboard({ data, onReset }) {
   });
 
   const getComplianceGrade = (score) => {
-    if (score >= 85) return { grade: 'GRADE A • COMPLIANT', color: '#6ee7b7' };
-    if (score >= 70) return { grade: 'GRADE B • MODERATE RISK', color: '#93c5fd' };
-    if (score >= 50) return { grade: 'GRADE C • HIGH RISK', color: '#fde047' };
-    return { grade: 'GRADE D • SEVERE NON-COMPLIANCE', color: '#fda4af' };
+    if (score >= 85) return { grade: 'GRADE A • STATUTORY COMPLIANT', color: '#166534' };
+    if (score >= 70) return { grade: 'GRADE B • MODERATE RISK', color: '#1e40af' };
+    if (score >= 50) return { grade: 'GRADE C • HIGH RISK', color: '#92400e' };
+    return { grade: 'GRADE D • SEVERE NON-COMPLIANCE', color: '#991b1b' };
   };
 
   const gradeInfo = getComplianceGrade(health_score);
 
-  const handlePrintReport = () => {
-    window.print();
+  const handleExportPdf = async () => {
+    try {
+      setDownloadingPdf(true);
+      const response = await api.post('/document/export-pdf', data, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const cleanName = (document_name || 'Contract').replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "_");
+      link.setAttribute('download', `ContractLens_Legal_Opinion_${cleanName}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      alert('Failed to generate PDF report.');
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
+
+  const handleExportDocx = async () => {
+    try {
+      setDownloadingDocx(true);
+      const response = await api.post('/document/export-docx', data, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const cleanName = (document_name || 'Contract').replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "_");
+      link.setAttribute('download', `Revised_Redlined_${cleanName}.docx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('DOCX export failed:', err);
+      alert('Failed to generate DOCX contract.');
+    } finally {
+      setDownloadingDocx(false);
+    }
+  };
+
+  const handleExportCertificate = async () => {
+    try {
+      setDownloadingCert(true);
+      const response = await api.post('/document/export-certificate', data, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const cleanName = (document_name || 'Contract').replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "_");
+      link.setAttribute('download', `Compliance_Certificate_${cleanName}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Certificate export failed:', err);
+      alert('Failed to generate certificate.');
+    } finally {
+      setDownloadingCert(false);
+    }
   };
 
   return (
-    <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '24px 24px 80px' }} className="animate-fade-in">
+    <div style={{ maxWidth: '1060px', margin: '0 auto', padding: '24px 24px 80px' }} className="animate-fade-in">
       
-      {/* Executive Document Metadata Header */}
-      <div className="glass-card card-gold-accent" style={{ padding: '24px 28px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <FileText style={{ color: 'var(--accent-gold)', width: '20px', height: '20px' }} />
-            <h1 style={{ fontSize: '1.4rem', margin: 0, fontFamily: 'var(--font-heading)' }}>{document_name}</h1>
-            <span style={{ 
-              fontSize: '0.72rem', 
-              padding: '3px 10px', 
-              borderRadius: 'var(--radius-sm)', 
-              background: 'rgba(255, 255, 255, 0.04)', 
-              color: 'var(--accent-gold)', 
-              border: '1px solid var(--border-gold)',
-              fontFamily: 'var(--font-mono)'
-            }}>
-              {document_type}
-            </span>
-          </div>
-
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span>Jurisdiction: <strong>Maharashtra, India</strong></span>
-            <span>•</span>
-            <span>PII Redacted: <strong style={{ color: 'var(--accent-gold)' }}>{total_items_masked} items</strong></span>
-            <span>•</span>
-            <span style={{ color: 'var(--text-gold)', display: 'flex', alignItems: 'center', gap: '4px', fontFamily: 'var(--font-mono)' }}>
-              <Clock style={{ width: '13px', height: '13px' }} /> Latency: {processing_time_seconds}s
-            </span>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={handlePrintReport} className="btn-secondary" style={{ fontSize: '0.82rem' }}>
-            <Printer style={{ width: '14px', height: '14px', color: 'var(--accent-gold)' }} /> Export Statutory Audit PDF
-          </button>
-
-          <button onClick={onReset} className="btn-secondary" style={{ fontSize: '0.82rem' }}>
-            Audit New Document
-          </button>
-        </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
-        {[
-          { id: 'dashboard', label: 'Statutory Audit Summary', icon: ShieldAlert },
-          { id: 'clauses', label: `Audited Clauses (${analyzed_clauses.length})`, icon: Layers },
-          { id: 'chat', label: 'Statutory Legal Assistant', icon: MessageSquare },
-          { id: 'compare', label: 'Version Comparison', icon: BookOpen }
-        ].map(tab => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                padding: '10px 18px',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '0.84rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: isActive ? 'rgba(197, 168, 128, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                color: isActive ? '#ffffff' : 'var(--text-muted)',
-                border: `1px solid ${isActive ? 'var(--accent-gold)' : 'var(--border-slate)'}`,
-                transition: 'var(--transition)'
-              }}
-            >
-              <Icon style={{ width: '15px', height: '15px', color: isActive ? 'var(--accent-gold-bright)' : 'var(--text-muted)' }} />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* TAB 1: OVERVIEW & HEATMAP */}
-      {activeTab === 'dashboard' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
-          {/* Top Score Cards Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '20px' }}>
-            
-            {/* Health Score Gauge Card */}
-            <div className="glass-card" style={{ padding: '28px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '14px' }}>
-                Compliance Rating
-              </div>
-
-              <div style={{
-                width: '110px',
-                height: '110px',
-                borderRadius: '50%',
-                border: `6px solid ${gradeInfo.color}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2.2rem',
-                fontWeight: 800,
-                fontFamily: 'var(--font-heading)',
-                color: gradeInfo.color,
-                marginBottom: '12px'
+      {/* Executive Header Bar */}
+      <div className="minimal-card" style={{ padding: '20px 24px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileText style={{ color: 'var(--accent-navy)', width: '20px', height: '20px' }} />
+              <h1 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>{document_name}</h1>
+              <span style={{ 
+                fontSize: '0.74rem', 
+                padding: '2px 8px', 
+                borderRadius: 'var(--radius-sm)', 
+                background: 'var(--bg-subtle)', 
+                color: 'var(--text-muted)',
+                fontWeight: 600
               }}>
-                {health_score}
-                <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}>/100</span>
-              </div>
-
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: gradeInfo.color, letterSpacing: '0.04em' }}>
-                {gradeInfo.grade}
-              </div>
+                {document_type}
+              </span>
             </div>
-
-            {/* Executive Summary & Statutory Risk Counters */}
-            <div className="glass-card" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <h3 style={{ fontSize: '1rem', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <ShieldAlert style={{ color: 'var(--accent-gold)', width: '16px', height: '16px' }} />
-                  Executive Statutory Audit Summary
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
-                  {executive_summary}
-                </p>
-              </div>
-
-              {/* Risk Level Stat Badges */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginTop: '18px' }}>
-                <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', background: 'var(--risk-critical-bg)', border: '1px solid var(--risk-critical-border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--risk-critical-text)', fontFamily: 'var(--font-mono)' }}>{risk_summary.critical}</div>
-                  <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--risk-critical-text)' }}>CRITICAL</div>
-                </div>
-
-                <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', background: 'var(--risk-high-bg)', border: '1px solid var(--risk-high-border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--risk-high-text)', fontFamily: 'var(--font-mono)' }}>{risk_summary.high}</div>
-                  <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--risk-high-text)' }}>HIGH</div>
-                </div>
-
-                <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', background: 'var(--risk-medium-bg)', border: '1px solid var(--risk-medium-border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--risk-medium-text)', fontFamily: 'var(--font-mono)' }}>{risk_summary.medium}</div>
-                  <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--risk-medium-text)' }}>MEDIUM</div>
-                </div>
-
-                <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', background: 'var(--risk-low-bg)', border: '1px solid var(--risk-low-border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--risk-low-text)', fontFamily: 'var(--font-mono)' }}>{risk_summary.low}</div>
-                  <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--risk-low-text)' }}>LOW</div>
-                </div>
-              </div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', display: 'flex', gap: '12px' }}>
+              <span>Jurisdiction: <strong>Maharashtra, India</strong></span>
+              <span>•</span>
+              <span>Audit Time: <strong>{processing_time_seconds}s</strong></span>
+              <span>•</span>
+              <span>Redacted PII: <strong>{total_items_masked} items</strong></span>
             </div>
-
           </div>
 
-          {/* Top Concerns List */}
-          {top_concerns && top_concerns.length > 0 && (
-            <div style={{
-              padding: '18px 22px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--risk-critical-bg)',
-              border: '1px solid var(--risk-critical-border)'
-            }}>
-              <h4 style={{ color: 'var(--risk-critical-text)', fontSize: '0.92rem', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertTriangle style={{ width: '16px', height: '16px' }} />
-                High Priority Statutory Compliance Violations
-              </h4>
-              <ul style={{ paddingLeft: '18px', fontSize: '0.85rem', color: '#fecdd3', lineHeight: 1.6 }}>
-                {top_concerns.map((concern, idx) => (
-                  <li key={idx} style={{ marginBottom: '3px' }}>{concern}</li>
-                ))}
-              </ul>
+          {/* Action Export Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <button onClick={handleExportPdf} disabled={downloadingPdf} className="btn-minimal">
+              <Printer style={{ width: '14px', height: '14px' }} />
+              {downloadingPdf ? 'Exporting...' : 'PDF Report'}
+            </button>
+
+            <button onClick={handleExportDocx} disabled={downloadingDocx} className="btn-minimal">
+              <FileText style={{ width: '14px', height: '14px' }} />
+              {downloadingDocx ? 'Exporting...' : 'Revised DOCX'}
+            </button>
+
+            <button onClick={handleExportCertificate} disabled={downloadingCert} className="btn-minimal">
+              <Award style={{ width: '14px', height: '14px' }} />
+              {downloadingCert ? 'Generating...' : 'Certificate'}
+            </button>
+
+            <button onClick={onReset} className="btn-minimal btn-minimal-primary">
+              Audit New File
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Compliance Health Score & Triage Bar */}
+      <div className="minimal-card" style={{ padding: '20px 24px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{
+            width: '54px',
+            height: '54px',
+            borderRadius: '50%',
+            background: health_score >= 75 ? 'var(--risk-low-bg)' : health_score >= 50 ? 'var(--risk-high-bg)' : 'var(--risk-critical-bg)',
+            border: `2px solid ${health_score >= 75 ? 'var(--risk-low-border)' : health_score >= 50 ? 'var(--risk-high-border)' : 'var(--risk-critical-border)'}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 800,
+            fontSize: '1.25rem',
+            color: health_score >= 75 ? 'var(--risk-low-text)' : health_score >= 50 ? 'var(--risk-high-text)' : 'var(--risk-critical-text)',
+            fontFamily: 'var(--font-mono)'
+          }}>
+            {health_score}
+          </div>
+
+          <div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>
+              Statutory Compliance Index
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '0.98rem', color: gradeInfo.color, marginTop: '2px' }}>
+              {gradeInfo.grade}
+            </div>
+          </div>
+        </div>
+
+        {/* Triage Badges */}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="badge-risk CRITICAL" style={{ padding: '6px 12px' }}>
+            {risk_summary.critical} CRITICAL
+          </div>
+          <div className="badge-risk HIGH" style={{ padding: '6px 12px' }}>
+            {risk_summary.high} HIGH
+          </div>
+          <div className="badge-risk MEDIUM" style={{ padding: '6px 12px' }}>
+            {risk_summary.medium} MEDIUM
+          </div>
+          <div className="badge-risk LOW" style={{ padding: '6px 12px' }}>
+            {risk_summary.low} COMPLIANT
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', borderBottom: '1px solid var(--border-main)', paddingBottom: '10px' }}>
+        <button
+          onClick={() => setActiveTab('top3')}
+          style={{
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: 700,
+            borderRadius: 'var(--radius-md)',
+            border: 'none',
+            background: activeTab === 'top3' ? 'var(--accent-navy)' : 'transparent',
+            color: activeTab === 'top3' ? 'var(--text-inverse)' : 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <AlertTriangle style={{ width: '15px', height: '15px' }} />
+          Top 3 Critical Risks
+        </button>
+
+        <button
+          onClick={() => setActiveTab('all_clauses')}
+          style={{
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: 600,
+            borderRadius: 'var(--radius-md)',
+            border: 'none',
+            background: activeTab === 'all_clauses' ? 'var(--accent-navy)' : 'transparent',
+            color: activeTab === 'all_clauses' ? 'var(--text-inverse)' : 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <Layers style={{ width: '15px', height: '15px' }} />
+          All Audited Clauses ({analyzed_clauses.length})
+        </button>
+
+        <button
+          onClick={() => setActiveTab('negotiate')}
+          style={{
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: 600,
+            borderRadius: 'var(--radius-md)',
+            border: 'none',
+            background: activeTab === 'negotiate' ? 'var(--accent-navy)' : 'transparent',
+            color: activeTab === 'negotiate' ? 'var(--text-inverse)' : 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <Mail style={{ width: '15px', height: '15px', color: 'var(--accent-gold)' }} />
+          Negotiation & Notice Generator
+        </button>
+
+        <button
+          onClick={() => setActiveTab('compare')}
+          style={{
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: 600,
+            borderRadius: 'var(--radius-md)',
+            border: 'none',
+            background: activeTab === 'compare' ? 'var(--accent-navy)' : 'transparent',
+            color: activeTab === 'compare' ? 'var(--text-inverse)' : 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <GitCompare style={{ width: '15px', height: '15px' }} />
+          Version Redline Matrix
+        </button>
+
+        <button
+          onClick={() => setActiveTab('chat')}
+          style={{
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: 600,
+            borderRadius: 'var(--radius-md)',
+            border: 'none',
+            background: activeTab === 'chat' ? 'var(--accent-navy)' : 'transparent',
+            color: activeTab === 'chat' ? 'var(--text-inverse)' : 'var(--text-muted)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          <MessageSquare style={{ width: '15px', height: '15px' }} />
+          Statutory Legal Chat
+        </button>
+      </div>
+
+      {/* TAB 1: TOP 3 CRITICAL RISKS PRIMARY VIEW */}
+      {activeTab === 'top3' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Action Callout Banner to Ask Landlord to Change Top 3 Clauses */}
+          <div className="minimal-card" style={{ 
+            padding: '20px 24px', 
+            background: 'var(--bg-subtle)',
+            border: '1px solid var(--border-gold)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap'
+          }}>
+            <div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--text-main)', margin: 0, fontWeight: 700 }}>
+                Request Amendments for Top 3 Critical Risks
+              </h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                Generate a formal statutory amendment request asking the landlord to revise these 3 non-compliant provisions.
+              </p>
+            </div>
+
+            <button
+              className="btn-minimal btn-minimal-gold"
+              onClick={() => setActiveTab('negotiate')}
+              style={{ padding: '10px 18px', fontWeight: 700 }}
+            >
+              <span>Ask Landlord to Change These 3 Clauses</span>
+              <ArrowRight style={{ width: '15px', height: '15px' }} />
+            </button>
+          </div>
+
+          {/* Render Top 3 Risk Cards */}
+          {top3Clauses.map((clause, idx) => (
+            <ClauseCard key={clause.clause_id || idx} clause={clause} index={idx + 1} isTopRisk={true} />
+          ))}
+
+          {/* View All Clauses Button */}
+          {analyzed_clauses.length > 3 && (
+            <div style={{ textAlign: 'center', marginTop: '12px' }}>
+              <button
+                className="btn-minimal"
+                onClick={() => setActiveTab('all_clauses')}
+                style={{ padding: '10px 24px', fontSize: '0.86rem' }}
+              >
+                View Remaining {analyzed_clauses.length - 3} Audited Clauses
+                <ArrowRight style={{ width: '14px', height: '14px' }} />
+              </button>
             </div>
           )}
-
-          {/* Document Risk Heatmap */}
-          <RiskHeatmap heatmapData={risk_heatmap} onSelectClause={(id) => {
-            setActiveTab('clauses');
-          }} />
-
         </div>
       )}
 
-      {/* TAB 2: FLAGGED CLAUSES */}
-      {activeTab === 'clauses' && (
+      {/* TAB 2: ALL AUDITED CLAUSES VIEW */}
+      {activeTab === 'all_clauses' && (
         <div>
-          {/* Risk Level Filter Bar */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              Showing {filteredClauses.length} of {analyzed_clauses.length} evaluated clauses:
-            </div>
-            
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(level => (
-                <button
-                  key={level}
-                  onClick={() => setRiskFilter(level)}
-                  style={{
-                    padding: '5px 12px',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-mono)',
-                    cursor: 'pointer',
-                    background: riskFilter === level ? 'rgba(197, 168, 128, 0.2)' : 'rgba(255, 255, 255, 0.02)',
-                    border: `1px solid ${riskFilter === level ? 'var(--accent-gold)' : 'var(--border-slate)'}`,
-                    color: riskFilter === level ? '#ffffff' : 'var(--text-muted)'
-                  }}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
+          {/* Risk Filter Bar */}
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+            {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(level => (
+              <button
+                key={level}
+                onClick={() => setRiskFilter(level)}
+                className="btn-minimal"
+                style={{
+                  fontSize: '0.78rem',
+                  padding: '6px 12px',
+                  borderColor: riskFilter === level ? 'var(--accent-navy)' : 'var(--border-main)',
+                  fontWeight: riskFilter === level ? 700 : 500
+                }}
+              >
+                {level} ({level === 'ALL' ? analyzed_clauses.length : analyzed_clauses.filter(c => c.risk_level === level).length})
+              </button>
+            ))}
           </div>
 
-          {/* Clause Cards List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {filteredClauses.map(clause => (
-              <ClauseCard key={clause.clause_id} clause={clause} />
+            {filteredClauses.map((clause, idx) => (
+              <ClauseCard key={clause.clause_id || idx} clause={clause} index={idx + 1} isTopRisk={false} />
             ))}
           </div>
         </div>
       )}
 
-      {/* TAB 3: CONTRACT CHAT */}
-      {activeTab === 'chat' && (
-        <ContractChat contractText={data.document_name} analyzedClauses={analyzed_clauses} />
+      {/* TAB 3: NEGOTIATION EMAIL & NOTICE GENERATOR */}
+      {activeTab === 'negotiate' && (
+        <NegotiationGenerator clauses={top3Clauses} documentName={document_name} />
       )}
 
-      {/* TAB 4: CONTRACT COMPARISON */}
+      {/* TAB 4: VERSION REDLINE MATRIX */}
       {activeTab === 'compare' && (
-        <ContractComparison originalAnalysis={data} />
+        <ContractComparison analyzedClauses={analyzed_clauses} documentName={document_name} />
+      )}
+
+      {/* TAB 5: STATUTORY LEGAL ASSISTANT CHAT */}
+      {activeTab === 'chat' && (
+        <ContractChat analyzedClauses={analyzed_clauses} documentName={document_name} />
+      )}
+
+      {/* Empirical Benchmark Modal */}
+      {isBenchmarkOpen && (
+        <EmpiricalBenchmarkModal onClose={() => setIsBenchmarkOpen(false)} />
       )}
 
     </div>

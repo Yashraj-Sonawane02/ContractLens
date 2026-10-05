@@ -31,6 +31,10 @@ class AnalysisHistory(Base):
     total_clauses = Column(Integer, default=0)
     processing_time_seconds = Column(Float, default=0.0)
     
+    # Encrypted Object Storage References
+    file_key = Column(String(500), nullable=True)
+    storage_type = Column(String(50), default="LOCAL_ENCRYPTED_AES256")
+    
     # Store full analysis payload as JSON for retrieval
     analysis_result_json = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)

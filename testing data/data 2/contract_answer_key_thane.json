@@ -1,0 +1,616 @@
+{
+  "document": "Leave and License Agreement – Thane, Maharashtra (fictional specimen, Set 2)",
+  "disclaimer": "Labels are an AI-generated expected classification for software testing. Validate with a practising Maharashtra property lawyer before using as gold-standard data.",
+  "risk_rules": {
+    "CRITICAL": -20,
+    "HIGH": -10,
+    "MEDIUM": -4,
+    "LOW": 0
+  },
+  "expected_counts": {
+    "CRITICAL": 1,
+    "HIGH": 3,
+    "MEDIUM": 4,
+    "LOW": 21
+  },
+  "expected_total_deduction": 66,
+  "expected_health_score": 34,
+  "clauses": [
+    {
+      "clause_no": 1,
+      "title": "LICENSED PREMISES AND PURPOSE",
+      "text": "1.1 The Licensor grants to the Licensees, jointly, a non-exclusive personal licence to occupy the Licensed Premises together with the fixtures and furniture listed in Annexure 'A' and the use of covered car parking space No. P-114, solely for the residential use of the Licensees and their minor daughter.\n1.2 This Agreement is a leave and licence only. It does not create any tenancy, sub-tenancy or any interest in the Licensed Premises, and possession remains with the Licensor at all times.",
+      "expected_category": "Grant of License / Scope",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Standard licence grant; residential-only; expressly not a tenancy.",
+      "legal_basis": "Indian Easements Act 1882 s.52",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 2,
+      "title": "TERM AND POSSESSION",
+      "text": "2.1 The licence is granted for 11 (eleven) months commencing on 1st January 2027 and ending on 30th November 2027 (both days inclusive) (the \"License Period\").\n2.2 The Licensor shall hand over vacant and peaceful possession on 1st January 2027 against receipt of the Security Deposit and the first month's License Fee.\n2.3 If the Licensees do not vacate on expiry, they shall pay compensation at 125% (one hundred and twenty-five percent) of the pro-rata daily License Fee for a maximum of 15 (fifteen) days, after which the Licensor may initiate proceedings for recovery of possession. Such payment confers no right to remain in possession.",
+      "expected_category": "Term / Possession",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Clear dates, possession date and a moderate, time-capped holding-over charge (contrast: a 200% uncapped charge would be borderline).",
+      "legal_basis": "MRCA 1999 s.55 (11-month L&L structure); ICA s.74 (reasonable compensation)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 3,
+      "title": "LICENSE FEE AND PAYMENT",
+      "text": "3.1 The Licensees shall pay a monthly license fee of Rs. 38,000/- (Rupees Thirty-Eight Thousand only) (the \"License Fee\"), in advance, on or before the 7th day of each calendar month by NEFT/UPI to the NRO account of the Licensor: Account Holder: Dr. Anand Shankar Bapat, ICICI Bank, Ghodbunder Road Branch, Account No. 003901567842, IFSC: ICIC0006789, UPI ID: nilesh.gawde@okicici.\n3.2 The Licensor (or his Attorney) shall issue a written or electronic receipt within 3 (three) days of each payment.\n3.3 The License Fee shall remain fixed for the entire License Period.",
+      "expected_category": "License Fee / Payment",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Fixed fee, traceable banking channel, receipt obligation. NOTE: 3.3 (fee fixed) conflicts with Clause 4.",
+      "legal_basis": "Income-tax rules on cash limits – banking channel is compliant",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 4,
+      "title": "REVISION OF LICENSE FEE",
+      "text": "4.1 Notwithstanding Clause 3.3, the Licensor may, at any time during the License Period, revise the License Fee upward at his sole discretion to reflect prevailing market conditions, by giving 15 (fifteen) days' written notice to the Licensees.\n4.2 The revised License Fee shall be binding on the Licensees from the date specified in the notice. If the Licensees do not accept the revision, their only remedy is to vacate in accordance with Clause 9.",
+      "expected_category": "Rent Revision / Escalation",
+      "expected_risk": "HIGH",
+      "expected_points": -10,
+      "trigger_text": "revise the License Fee upward at his sole discretion",
+      "rationale": "Open-ended unilateral price variation with no cap, no formula and no consent; the only remedy (vacate) is blocked by the lock-in and forfeiture in Clause 9. Directly contradicts Clause 3.3.",
+      "legal_basis": "ICA s.23 / s.29 (uncertainty & one-sidedness); rule: unilateral variation without cap or consent",
+      "expected_safer_alternative": "Any change in the License Fee shall be made only by a written amendment signed by both parties under Clause 29.2. No increase shall apply during the License Period.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 5,
+      "title": "TAXES AND TAX DEDUCTION AT SOURCE",
+      "text": "5.1 The Licensor is a non-resident of India. The Licensees shall deduct tax at source on the License Fee as required by law and shall deposit it with the Government within the due dates.\n5.2 All such tax, together with any interest, fee or penalty arising from TDS compliance, shall be borne solely by the Licensees, who shall pay to the Licensor such additional amount as will ensure that the Licensor receives the full License Fee net of all taxes.",
+      "expected_category": "Tax / TDS",
+      "expected_risk": "MEDIUM",
+      "expected_points": -4,
+      "trigger_text": "such additional amount as will ensure that the Licensor receives the full License Fee net of all taxes",
+      "rationale": "Gross-up shifts the Licensor's own income-tax burden onto the Licensees; for a non-resident payee the effective extra cost can be very large. Also makes the Licensees liable for penalties even if caused by the Licensor's missing documents.",
+      "legal_basis": "Income-tax law on TDS for payments to non-residents (formerly s.195 of the 1961 Act; now under the Income-tax Act, 2025 – verify current section)",
+      "expected_safer_alternative": "The Licensor shall bear all income-tax on the License Fee. The Licensees shall deduct TDS from the License Fee as required by law, furnish the TDS certificate, and the Licensor shall provide PAN and any certificate needed to reduce deduction.",
+      "annotator_confidence": "medium"
+    },
+    {
+      "clause_no": 6,
+      "title": "DELAYED PAYMENT INTEREST",
+      "text": "6.1 If any instalment of the License Fee remains unpaid after a grace period of 5 (five) days from the due date, the Licensees shall pay simple interest at 18% (eighteen percent) per annum on the overdue amount from the due date until payment.\n6.2 Interest under this Clause is the Licensor's sole monetary remedy for delay of up to 30 (thirty) days. Continued default shall be dealt with under Clause 10.",
+      "expected_category": "Late Payment",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "BORDERLINE-LOW. 18% p.a. is at the upper end but is interest (not a per-day penalty), has a grace period, and is the sole remedy for short delays. Test that the system does NOT confuse \"18%\" with an oppressive per-day penalty.",
+      "legal_basis": "ICA s.74; Interest Act 1978 (by analogy)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "medium"
+    },
+    {
+      "clause_no": 7,
+      "title": "SECURITY DEPOSIT",
+      "text": "7.1 The Licensees have paid to the Licensor an interest-free refundable security deposit of Rs. 2,28,000/- (Rupees Two Lakh Twenty-Eight Thousand only), being six months' License Fee (the \"Security Deposit\"), by NEFT bearing UTR No. KKBKN52026122398765432 dated 23rd December 2026, receipt of which the Licensor acknowledges.\n7.2 The Security Deposit is not an advance of License Fee and the Licensees shall not adjust it against the License Fee, except with the Licensor's written consent.",
+      "expected_category": "Security Deposit",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Six months' fee is on the higher side but within Mumbai-region market practice; receipt acknowledged; no forfeiture here (see Clause 8 and 9 for the risky parts).",
+      "legal_basis": "No statutory cap under Maharashtra law for L&L (Model Tenancy Act 2021 not adopted – verify)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "medium"
+    },
+    {
+      "clause_no": 8,
+      "title": "DEDUCTIONS FROM AND REFUND OF DEPOSIT",
+      "text": "8.1 Within 30 (thirty) days after the Licensees hand over vacant possession, the Licensor shall refund the Security Deposit after deducting (a) arrears of License Fee and utility dues, and (b) a fixed sum of Rs. 18,000/- towards painting and deep-cleaning, irrespective of the actual condition of the Licensed Premises.\n8.2 No interest shall be payable on the Security Deposit. Any further damage shall be recovered from the Licensees at actuals.",
+      "expected_category": "Security Deposit / Deductions",
+      "expected_risk": "MEDIUM",
+      "expected_points": -4,
+      "trigger_text": "a fixed sum of Rs. 18,000/- towards painting and deep-cleaning, irrespective of the actual condition of the Licensed Premises",
+      "rationale": "A flat, non-evidence-based deduction applied even if the flat is returned spotless; ~47% of one month's fee. (Refund period of 30 days is acceptable.)",
+      "legal_basis": "ICA s.74 (only reasonable compensation); rule: fixed deductions without proof of loss",
+      "expected_safer_alternative": "Deductions shall be limited to actual, documented dues and damage beyond normal wear and tear, supported by bills.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 9,
+      "title": "LOCK-IN AND EARLY EXIT",
+      "text": "9.1 The Licensees shall not terminate this Agreement before the expiry of the License Period (the \"Lock-in Period\").\n9.2 If the Licensees vacate or terminate during the Lock-in Period for any reason whatsoever, the Security Deposit shall stand forfeited in full and the Licensees shall in addition pay the License Fee for the balance of the License Period.\n9.3 The Licensor may terminate this Agreement during the License Period only in accordance with Clause 10.",
+      "expected_category": "Lock-in / Forfeiture",
+      "expected_risk": "HIGH",
+      "expected_points": -10,
+      "trigger_text": "the Security Deposit shall stand forfeited in full and the Licensees shall in addition pay the License Fee for the balance of the License Period",
+      "rationale": "Lock-in covers the entire term and exit triggers double recovery: 100% forfeiture (six months' fee) PLUS all remaining fees, regardless of the Licensor's actual loss or re-letting. Applies \"for any reason whatsoever\" – including Licensor's breach.",
+      "legal_basis": "ICA s.74 (penalty vs reasonable compensation); ICA s.23; rule: forfeiture + balance-term recovery",
+      "expected_safer_alternative": "The Lock-in Period shall be 6 months. Early exit after that requires 60 days' notice or fee in lieu, and the Security Deposit shall be refunded subject to Clause 8. Neither party shall be penalised for exit due to the other's breach.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 10,
+      "title": "TERMINATION FOR DEFAULT",
+      "text": "10.1 If the Licensees fail to pay the License Fee for two consecutive months, or commit a material breach of Clause 15, and fail to remedy the default within 15 (fifteen) days of a written notice from the Licensor specifying it, the Licensor may terminate this Agreement by a further written notice.\n10.2 If the Licensor commits a material breach of Clause 19 or Clause 20 and does not remedy it within 15 (fifteen) days of written notice, the Licensees may terminate this Agreement without liability under Clause 9, and the Licensor shall refund the Security Deposit and pro-rata advance License Fee within 15 (fifteen) days.",
+      "expected_category": "Termination for Breach",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Mutual, notice-and-cure termination. NOTE: this gives a Licensee exit right that Clause 9.2 (\"for any reason whatsoever\") contradicts, and the notice-and-cure protection is overridden by Clause 11.",
+      "legal_basis": "ICA s.39 (repudiation); Easements Act ss.60–63",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 11,
+      "title": "RIGHT OF RE-ENTRY",
+      "text": "11.1 If any amount due from the Licensees remains unpaid for 3 (three) days after its due date, the Licensor or his Attorney may, without notice and without recourse to any court, enter the Licensed Premises, change the locks, take over possession, and treat the licence as terminated.\n11.2 The Licensor may remove the belongings of the Licensees from the Licensed Premises and, if not collected within 7 (seven) days, sell or dispose of them in any manner and apply the proceeds towards the dues. The Licensees shall have no claim for loss or damage to such belongings.",
+      "expected_category": "Possession / Self-help Eviction",
+      "expected_risk": "CRITICAL",
+      "expected_points": -20,
+      "trigger_text": "without notice and without recourse to any court, enter the Licensed Premises, change the locks, take over possession",
+      "rationale": "Self-help dispossession, lock-out and disposal of belongings without notice or court order is unlawful in India; it can amount to criminal trespass/mischief and breach of Maharashtra rent law. Waiver of any claim for loss of belongings aggravates it. Contradicts the notice-and-cure in Clause 10.",
+      "legal_basis": "Maharashtra Rent Control Act 1999 (protection against unlawful dispossession – verify section); Specific Relief Act 1963 s.6; BNS 2023 (criminal trespass/mischief – verify sections)",
+      "expected_safer_alternative": "The Licensor shall recover possession only through due process of law after termination under Clause 10. The Licensor shall not enter, lock out, or remove or dispose of the Licensees' belongings without a court order.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 12,
+      "title": "RENEWAL",
+      "text": "12.1 This Agreement may be renewed for a further period of 11 (eleven) months only by mutual written consent, through a fresh Leave and License Agreement that shall be duly stamped and registered.\n12.2 The Licensees may request renewal by written notice not less than 45 (forty-five) days before expiry. The Licensor shall respond in writing within 15 (fifteen) days. On renewal the License Fee shall increase by 8% (eight percent).",
+      "expected_category": "Renewal / Escalation",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Mutual consent, reasonable notice and a stated, modest escalation. Not auto-renewing (compare with an auto-renew + 15% clause, which would be MEDIUM).",
+      "legal_basis": "Registration Act 1908; MRCA 1999 s.55",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 13,
+      "title": "SOCIETY CHARGES AND UTILITIES",
+      "text": "13.1 The Licensees shall pay, per actual consumption and by the due dates, electricity (MSEDCL Consumer No. 021500876543), piped gas (Mahanagar Gas CA No. 7000123456), water, internet and cable charges.\n13.2 The Licensees shall pay the monthly Society maintenance charge of Rs. 3,400/- to the Society. Property tax, redevelopment or sinking-fund contributions, and non-occupancy or transfer charges levied by the Society on the owner shall be borne by the Licensor.\n13.3 The Licensor shall ensure that Society dues up to 31st December 2026 are fully paid and shall give the Licensees the Society's no-dues letter on request.",
+      "expected_category": "Utilities / Outgoings",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Clear, fair allocation of recurring vs. owner-level charges.",
+      "legal_basis": "Maharashtra Co-operative Societies Act 1960 and bye-laws (non-occupancy charges)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 14,
+      "title": "REPAIRS AND MAINTENANCE",
+      "text": "14.1 The Licensor shall bear the cost of structural repairs, waterproofing, seepage, and repairs to concealed plumbing and electrical wiring not caused by the Licensees, and of any defect existing at the start of the License Period.\n14.2 The Licensees shall bear the cost of minor day-to-day repairs arising from their use (including tap washers, bulbs, switches, door handles and servicing of appliances) up to Rs. 2,000/- per incident. Any repair above that amount arising from the Licensees' negligence shall also be borne by them at actuals.\n14.3 The Licensees shall report any major defect to the Licensor promptly, and the Licensor shall arrange repair within a reasonable time.",
+      "expected_category": "Repairs / Maintenance",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Balanced, capped allocation. Good counter-example to uncapped \"all repairs\" clauses.",
+      "legal_basis": "TPA s.108 (by analogy)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 15,
+      "title": "USE, OCCUPANCY AND GUESTS",
+      "text": "15.1 The Licensed Premises shall be used only as a private residence for the Licensees and their minor daughter. No commercial, professional or illegal activity shall be carried on.\n15.2 The Licensees shall not sub-license, assign or part with possession. Guests may stay for up to 15 (fifteen) consecutive days without consent; longer stays need the Licensor's prior written consent, not to be unreasonably withheld.\n15.3 Pets are permitted only with the Society's approval. The Licensees shall comply with Society rules on noise, parking, waste disposal and use of common areas.",
+      "expected_category": "Use / Restrictions",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Ordinary, reasonable use restrictions with a reasonableness standard.",
+      "legal_basis": "Society bye-laws",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 16,
+      "title": "FOOD AND HOUSEHOLD PRACTICES",
+      "text": "16.1 The Licensees shall not cook, store, bring or consume non-vegetarian food or eggs in the Licensed Premises, and shall not organise any religious or social gathering without the Licensor's prior written permission.\n16.2 Breach of this Clause shall be treated as a material breach of Clause 15.",
+      "expected_category": "Use / Restrictions (Discriminatory)",
+      "expected_risk": "MEDIUM",
+      "expected_points": -4,
+      "trigger_text": "shall not cook, store, bring or consume non-vegetarian food or eggs in the Licensed Premises",
+      "rationale": "Intrusive dietary restriction that can operate as community-based discrimination and is unrelated to protecting the property; combined with the \"material breach\" tag it can be used to terminate. Typical real-world Mumbai-region clause. Tests whether the system catches risks outside price/penalty keywords.",
+      "legal_basis": "Constitution Art. 14, 15, 21 (State action; persuasive for private terms); ICA s.23 (public policy) – enforceability uncertain; verify with a lawyer",
+      "expected_safer_alternative": "The Licensees shall use the Licensed Premises lawfully and in compliance with the Society's bye-laws. No restriction on lawful food habits shall apply.",
+      "annotator_confidence": "medium"
+    },
+    {
+      "clause_no": 17,
+      "title": "INSPECTION AND ACCESS",
+      "text": "17.1 The Licensor or his Attorney may inspect the Licensed Premises once in every month, between 11 a.m. and 5 p.m., on 48 (forty-eight) hours' prior notice, and may enter at other times only in a genuine emergency (fire, leakage, gas smell).\n17.2 During the last 30 (thirty) days of the License Period, the Licensor may show the Licensed Premises to prospective licensees at reasonable hours on 24 (twenty-four) hours' prior notice.",
+      "expected_category": "Inspection / Privacy",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Defined frequency, hours and notice, with a narrow emergency exception. Contrast with \"any time, 2 hours' notice\".",
+      "legal_basis": "TPA s.108 (quiet enjoyment, by analogy)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 18,
+      "title": "ALTERATIONS",
+      "text": "18.1 The Licensees shall not make structural alterations, break walls, change fittings or drill into load-bearing elements without prior written consent.\n18.2 Minor, reversible installations (curtain rods, shelves, wall-mounted TV) are permitted, and the Licensees shall repair any holes at the end of the licence.",
+      "expected_category": "Alterations",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Reasonable and practical.",
+      "legal_basis": "Society bye-laws",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 19,
+      "title": "AUTHORITY OF LICENSOR AND ATTORNEY",
+      "text": "19.1 The Licensor is the sole owner of the Licensed Premises and has appointed Mr. Nilesh Ramchandra Gawde as his constituted attorney under a registered Power of Attorney dated 12th March 2024 (Document No. THN-4-03127-2024), a copy of which is annexed. The Attorney confirms that the Power of Attorney is valid, subsisting, not revoked and covers the grant of leave and licence.\n19.2 The Licensor and the Attorney jointly warrant that the Licensed Premises are free of encumbrances, attachments and litigation, and that the Society's No Objection Certificate for this licence has been obtained and a copy handed to the Licensees.",
+      "expected_category": "Title & Authority",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Title and authority warranties given jointly; attorney's confirmation of POA validity; NOC copy delivered. A good clause that is NOT present in the first specimen.",
+      "legal_basis": "Powers of Attorney Act 1882; Society bye-laws (NOC)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 20,
+      "title": "LICENSOR'S COVENANTS AND QUIET ENJOYMENT",
+      "text": "20.1 So long as the Licensees pay the License Fee and observe this Agreement, they shall peacefully use the Licensed Premises without interruption by the Licensor or any person claiming through him.\n20.2 The Licensor shall not disconnect or interfere with electricity, water, gas, lift or access to the Licensed Premises, and shall indemnify the Licensees against any Society action caused by the Licensor's default in paying Society dues.",
+      "expected_category": "Quiet Enjoyment",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Strong licensee protections including a no-cut-off covenant.",
+      "legal_basis": "MRCA 1999 (no cut-off of essential supplies – verify section)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 21,
+      "title": "INDEMNITY AND LIABILITY",
+      "text": "21.1 Each party shall indemnify the other against third-party claims and direct losses to the extent caused by its own negligence, wilful default or breach of this Agreement.\n21.2 The Licensees shall be liable for damage to the Licensed Premises or inventory caused by themselves, their family or guests, fair wear and tear excepted. Neither party shall be liable for indirect or consequential loss.",
+      "expected_category": "Indemnity / Liability",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Mutual and fault-based. Contains strong words (\"liable\", \"indemnify\") that should NOT trigger a false positive.",
+      "legal_basis": "ICA ss.124–125",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 22,
+      "title": "REGISTRATION AND STAMP DUTY",
+      "text": "22.1 The parties shall register this Agreement before the Sub-Registrar of Assurances, Thane, within the period prescribed by law. The Licensor shall attend the registration personally or through his Attorney.\n22.2 Stamp duty under Article 36 of Schedule I of the Maharashtra Stamp Act, 1958 and registration charges shall be borne by the Licensees. The Licensor shall provide the registered copy to the Licensees.",
+      "expected_category": "Registration / Stamp Duty",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "BORDERLINE-LOW. Licensee bearing the (small) stamp and registration costs is common market practice; registration obligation and attendance by Licensor are included.",
+      "legal_basis": "Maharashtra Stamp Act 1958 Art. 36; Registration Act 1908; MRCA 1999 s.55",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "medium"
+    },
+    {
+      "clause_no": 23,
+      "title": "COMPLIANCE AND POLICE VERIFICATION",
+      "text": "23.1 The Licensor shall, within the time prescribed by law, submit the Licensees' particulars for police verification. The Licensees shall provide identity proof, address proof and photographs and co-operate.\n23.2 The Licensees shall obey all applicable laws, Society rules and municipal regulations in their use of the Licensed Premises.",
+      "expected_category": "Compliance / Police Verification",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Standard compliance obligations.",
+      "legal_basis": "Maharashtra police tenant/licensee intimation orders",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 24,
+      "title": "PERSONAL DATA",
+      "text": "24.1 The Licensees consent to the Licensor, his Attorney and their agents collecting, storing and using the Licensees' identity documents, contact details, photographs and financial information for any purpose, and sharing them with brokers, property portals, service providers and other third parties as the Licensor thinks fit.\n24.2 The Licensor may retain such data for as long as he considers necessary.",
+      "expected_category": "Privacy / Data Protection",
+      "expected_risk": "MEDIUM",
+      "expected_points": -4,
+      "trigger_text": "for any purpose, and sharing them with brokers, property portals, service providers and other third parties as the Licensor thinks fit",
+      "rationale": "Blanket consent for unspecified purposes, unrestricted third-party sharing and indefinite retention for sensitive ID data (Aadhaar/PAN). Not within price/penalty rules – tests generalisation. Contrast with a purpose-limited data clause.",
+      "legal_basis": "Digital Personal Data Protection Act 2023 (purpose limitation, specific consent, storage limitation); Aadhaar Act 2016 – verify",
+      "expected_safer_alternative": "The Licensor shall use the Licensees' personal data only for this Agreement, registration, police verification and legal compliance, shall not share it otherwise, and shall delete it within 6 months after expiry.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 25,
+      "title": "FORCE MAJEURE",
+      "text": "25.1 Neither party shall be liable for delay or failure to perform (other than payment of money already due) caused by events beyond its reasonable control, including fire, flood, earthquake, epidemic, government order or lockdown.\n25.2 If any such event makes the Licensed Premises uninhabitable for more than 30 (thirty) consecutive days, either party may terminate this Agreement without penalty and the Licensor shall refund the Security Deposit and the unused advance License Fee within 15 (fifteen) days.",
+      "expected_category": "Force Majeure",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Balanced force majeure with a clear exit and refund. (Note: Clause 9.2 \"for any reason whatsoever\" arguably conflicts with the exit in 25.2.)",
+      "legal_basis": "ICA s.56 (frustration)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 26,
+      "title": "DISPUTE RESOLUTION",
+      "text": "26.1 Any dispute arising out of this Agreement shall first be discussed in good faith for 15 (fifteen) days after written notice.\n26.2 Failing settlement, the dispute shall be referred to a sole arbitrator to be appointed by the Licensor alone, whose appointment shall not be questioned by the Licensees, under the Arbitration and Conciliation Act, 1996. The seat shall be Thane and the costs of arbitration shall be borne by the Licensees in the first instance.",
+      "expected_category": "Dispute Resolution",
+      "expected_risk": "HIGH",
+      "expected_points": -10,
+      "trigger_text": "a sole arbitrator to be appointed by the Licensor alone, whose appointment shall not be questioned by the Licensees",
+      "rationale": "Unilateral appointment of the sole arbitrator by an interested party is contrary to the neutrality requirement and can be struck down, but leaves the Licensee with cost and delay; cost-shifting to the Licensee worsens it. Different failure mode from a blanket waiver of court access.",
+      "legal_basis": "Arbitration and Conciliation Act 1996 s.12(5) with Seventh Schedule; Supreme Court decisions on unilateral appointment of arbitrators (e.g. TRF Ltd v Energo Engineering, 2017; Perkins Eastern Civil Engineers v DSC, 2019) – verify",
+      "expected_safer_alternative": "The arbitrator shall be appointed by mutual consent of both parties or, failing that, by the competent court. Costs shall be shared equally or as the arbitrator directs.",
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 27,
+      "title": "JURISDICTION AND GOVERNING LAW",
+      "text": "27.1 This Agreement is governed by the laws of India. Subject to Clause 26, the courts at Thane, including the Court of Small Causes where applicable, shall have jurisdiction.\n27.2 Nothing in this Agreement prevents either party from approaching a competent court for urgent interim relief.",
+      "expected_category": "Governing Law / Jurisdiction",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Standard; preserves interim relief access.",
+      "legal_basis": "CPC 1908 s.20",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 28,
+      "title": "NOTICES",
+      "text": "28.1 Notices shall be in writing and sent to the addresses and email IDs stated in this Agreement, or any changed address notified in writing.\n28.2 A notice sent by registered post A.D. is deemed served 5 (five) days after posting; a notice by email is deemed served on the next business day if no bounce-back is received.",
+      "expected_category": "Notices",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Standard, with reasonable deemed-service periods.",
+      "legal_basis": "General Clauses Act 1897 s.27 (by analogy)",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    },
+    {
+      "clause_no": 29,
+      "title": "GENERAL",
+      "text": "29.1 This Agreement and its Annexures are the entire agreement between the parties and supersede all prior understandings.\n29.2 No amendment is valid unless in writing and signed by all parties.\n29.3 The Licensees' obligations are joint and several. The Licensees shall not assign their rights under this Agreement.\n29.4 If any provision is held unenforceable, the rest of the Agreement continues in force.\n29.5 This Agreement is executed in three originals, one each for the Licensor, the Licensees and for registration.",
+      "expected_category": "Boilerplate",
+      "expected_risk": "LOW",
+      "expected_points": 0,
+      "trigger_text": null,
+      "rationale": "Standard boilerplate. Joint-and-several liability is normal for co-licensees.",
+      "legal_basis": "ICA s.43",
+      "expected_safer_alternative": null,
+      "annotator_confidence": "high"
+    }
+  ],
+  "expected_missing_clauses": [
+    "No clause on sale / transfer of the flat or death / incapacity of the Licensor during the License Period (whether the licence survives and who refunds the deposit)",
+    "No insurance / fire-safety clause (building or contents cover; responsibility for loss of Licensees’ belongings)",
+    "No rent abatement or repair-deadline remedy for prolonged loss of water, lift or habitability (other than the 30-day force-majeure exit)",
+    "No interest on delayed refund of the Security Deposit by the Licensor (interest runs only against the Licensees under Clause 6)",
+    "No move-in condition report with photographs signed by both parties (Annexure A lists items and condition only in brief)"
+  ],
+  "known_internal_conflicts": [
+    "Clause 3.3 (License Fee fixed for the whole period) vs Clause 4 (Licensor may revise the fee upward at any time).",
+    "Clause 10.1 (15-day notice-and-cure before termination) vs Clause 11.1 (re-entry after 3 days, without notice).",
+    "Clause 9.2 (Licensee exit penalised “for any reason whatsoever”) vs Clause 10.2 and Clause 25.2 (Licensee may exit without liability for Licensor breach / uninhabitability).",
+    "Clause 11.1 (entry without notice) vs Clause 17.1 (entry only on 48 hours’ notice, once a month) and Clause 20.2 (no interference by the Licensor)."
+  ],
+  "borderline_clauses": [
+    "Clause 6 (18% p.a. interest) – upper end of normal; expected LOW, a MEDIUM prediction is acceptable.",
+    "Clause 7 (6-month deposit) – high but market practice; expected LOW.",
+    "Clause 16 (dietary restriction) – expected MEDIUM; a HIGH prediction is acceptable.",
+    "Clause 22 (Licensee bears stamp duty) – expected LOW; a MEDIUM prediction is not a hard failure."
+  ],
+  "pii_ground_truth": [
+    {
+      "type": "PERSON",
+      "value": "Anand Shankar Bapat"
+    },
+    {
+      "type": "PERSON",
+      "value": "Nilesh Ramchandra Gawde"
+    },
+    {
+      "type": "PERSON",
+      "value": "Arjun Suresh Nair"
+    },
+    {
+      "type": "PERSON",
+      "value": "Kavya Arjun Nair"
+    },
+    {
+      "type": "PERSON",
+      "value": "Prakash Dattatray Sawant"
+    },
+    {
+      "type": "PERSON",
+      "value": "Rekha Mohan Joshi"
+    },
+    {
+      "type": "PAN",
+      "value": "AFBPB5612M"
+    },
+    {
+      "type": "PAN",
+      "value": "CMXPG2048H"
+    },
+    {
+      "type": "PAN",
+      "value": "AKNPN4821Q"
+    },
+    {
+      "type": "PAN",
+      "value": "BLRPN7390D"
+    },
+    {
+      "type": "AADHAAR",
+      "value": "5073 8896 2214"
+    },
+    {
+      "type": "AADHAAR",
+      "value": "3920 5148 7763"
+    },
+    {
+      "type": "AADHAAR",
+      "value": "6184 2057 9931"
+    },
+    {
+      "type": "PASSPORT",
+      "value": "Z9876543"
+    },
+    {
+      "type": "PHONE",
+      "value": "+971 50 123 4567"
+    },
+    {
+      "type": "PHONE",
+      "value": "+91 98201 55667"
+    },
+    {
+      "type": "PHONE",
+      "value": "+91 99870 22314"
+    },
+    {
+      "type": "PHONE",
+      "value": "+91 99870 22315"
+    },
+    {
+      "type": "PHONE",
+      "value": "+91 98190 33441"
+    },
+    {
+      "type": "PHONE",
+      "value": "+91 97020 66188"
+    },
+    {
+      "type": "EMAIL",
+      "value": "anand.bapat@examplemail.com"
+    },
+    {
+      "type": "EMAIL",
+      "value": "nilesh.gawde@examplemail.com"
+    },
+    {
+      "type": "EMAIL",
+      "value": "arjun.nair@examplemail.com"
+    },
+    {
+      "type": "EMAIL",
+      "value": "kavya.nair@examplemail.com"
+    },
+    {
+      "type": "BANK_ACCOUNT",
+      "value": "003901567842"
+    },
+    {
+      "type": "IFSC",
+      "value": "ICIC0006789"
+    },
+    {
+      "type": "UPI_ID",
+      "value": "nilesh.gawde@okicici"
+    },
+    {
+      "type": "TXN_REFERENCE",
+      "value": "KKBKN52026122398765432"
+    },
+    {
+      "type": "UTILITY_CONSUMER_ID",
+      "value": "021500876543"
+    },
+    {
+      "type": "UTILITY_CONSUMER_ID",
+      "value": "7000123456"
+    },
+    {
+      "type": "VEHICLE_REG",
+      "value": "MH 04 KT 2718"
+    },
+    {
+      "type": "DOCUMENT_ID",
+      "value": "THN-4-03127-2024"
+    },
+    {
+      "type": "DOCUMENT_ID",
+      "value": "IN-MH61394820175306X"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "Apartment 2106, Marina Pinnacle, Dubai Marina, Dubai, UAE"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "5, Vrindavan Society, Naupada, Thane 400602"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "14, Palm Grove Apartments, Vazhuthacaud, Thiruvananthapuram 695014, Kerala"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "Flat No. B-1203, 12th Floor, B Wing, Lakeview Heights, Survey No. 118/4, Ghodbunder Road, Hiranandani Estate, Thane (West) 400607"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "C-22, Shanti Park, Majiwada, Thane 400601"
+    },
+    {
+      "type": "ADDRESS",
+      "value": "7, Gokul Niwas, Charai, Thane 400601"
+    },
+    {
+      "type": "ORGANIZATION",
+      "value": "Brightwave Analytics Pvt. Ltd."
+    },
+    {
+      "type": "ORGANIZATION",
+      "value": "Lakeview Heights Co-operative Housing Society Ltd."
+    }
+  ],
+  "metrics_that_must_survive_masking": [
+    "Rs. 38,000/-",
+    "Rs. 2,28,000/-",
+    "Rs. 18,000/-",
+    "Rs. 3,400/-",
+    "Rs. 2,000/-",
+    "Rs. 1,200/-",
+    "18% (eighteen percent) per annum",
+    "125% (one hundred and twenty-five percent)",
+    "8% (eight percent)",
+    "11 (eleven) months",
+    "45 (forty-five) days",
+    "30 (thirty) days",
+    "15 (fifteen) days",
+    "15 (fifteen) consecutive days",
+    "7 (seven) days",
+    "5 (five) days",
+    "3 (three) days",
+    "48 (forty-eight) hours",
+    "24 (twenty-four) hours",
+    "11 a.m. and 5 p.m.",
+    "1st January 2027",
+    "30th November 2027"
+  ],
+  "notes_for_testing": [
+    "Distribution differs from Set 1 on purpose: 1 CRITICAL, 3 HIGH, 4 MEDIUM, 21 LOW (expected health score 34 vs 20 in Set 1).",
+    "Risk types are different from Set 1: unilateral fee revision, tax gross-up, lock-in forfeiture, self-help re-entry, dietary restriction, blanket data consent and unilateral arbitrator. No clause repeats Set 1’s per-day penalty, utility cut-off, 7-day termination, waiver of courts, or uncapped repairs.",
+    "Several LOW clauses contain strong words (indemnify, liable, forfeit-free refund, 18%, 125%) to test false positives. Clauses 6, 7, 21 and 22 are the main decoys.",
+    "Clauses 16 and 24 sit outside price/penalty keyword rules and test generalisation; clause 26 tests a different dispute-resolution failure than a total waiver of court access.",
+    "Money is written as “Rs.” with Indian lakh formatting (e.g. Rs. 2,28,000/-) to test number handling.",
+    "This set adds PII types not in Set 1: passport number, UPI ID, vehicle registration, registered POA document number, UAE phone number and a non-Maharashtra permanent address.",
+    "The licensor acts through an attorney and there are two co-licensees – tests party extraction beyond one licensor / one licensee.",
+    "Statute references (Income-tax Act 2025 replacing the 1961 Act, BNS 2023 replacing IPC, MRCA section numbers) are flagged “verify” where the exact section should be confirmed by a lawyer before use as gold-standard data."
+  ]
+}

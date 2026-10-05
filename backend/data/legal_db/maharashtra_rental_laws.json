@@ -7,7 +7,7 @@
     "title": "Definitions - Licensee, Licensor, Standard Rent, Tenant",
     "jurisdiction": "Maharashtra",
     "domain": "Rental & Property",
-    "keywords": ["licensee", "licensor", "standard rent", "tenant", "premises", "definition"],
+    "keywords": ["licensee", "licensor", "standard rent", "tenant", "premises", "definition", "status"],
     "content": "Defines Licensee as a person given a license for occupation of premises; Licensor as the person giving license; Tenant as any person by whom or on whose account rent is payable; and Standard Rent as rent fixed by the Court or specified under the Act.",
     "key_legal_takeaway": "Establishes legal status distinguishing a tenant (with tenancy rights) from a licensee (with limited occupational license)."
   },
@@ -31,9 +31,33 @@
     "title": "Increase in rent annually and for improvements",
     "jurisdiction": "Maharashtra",
     "domain": "Rental & Property",
-    "keywords": ["annual increase", "rent escalation", "4 percent", "improvements", "taxes"],
+    "keywords": ["annual increase", "rent escalation", "4 percent", "improvements", "taxes", "escalation clause"],
     "content": "A landlord shall be entitled to make an annual increase in rent of not more than 4 per cent per annum in respect of premises let for residential purpose, and up to 15 per cent per annum where improvements or structural alterations are executed.",
     "key_legal_takeaway": "Caps annual rent escalation at 4% per annum unless structural improvements are made by the landlord."
+  },
+  {
+    "id": "mrca_sec_12",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 12",
+    "title": "Notice of increase of rent and structural alteration taxes",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["rent increase notice", "written notice", "tax increase", "alteration tax"],
+    "content": "Where a landlord is entitled to increase the rent of any premises, he shall give to the tenant a notice in writing of his intention to make the increase and of the amount thereof. The increase shall be due and recoverable only after the expiry of one month from the date of service of such notice.",
+    "key_legal_takeaway": "Mandates 30 days prior written notice before any permissible rent increase becomes enforceable."
+  },
+  {
+    "id": "mrca_sec_13",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 13",
+    "title": "Landlord's duty to keep premises in good repair",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["maintenance", "repairs", "tenant repairs", "deduct rent", "structural repair"],
+    "content": "Every landlord shall be bound to keep the premises in good and tenantable repair. If the landlord neglects to make repairs after receiving fifteen days notice in writing, the tenant may make the repairs himself and deduct the expenses thereof from the rent.",
+    "key_legal_takeaway": "Statutory duty on landlord to maintain premises. If neglected after 15 days notice, tenant may repair and deduct costs from rent."
   },
   {
     "id": "mrca_sec_14",
@@ -55,9 +79,9 @@
     "title": "No ejectment ordinarily to be made if tenant pays standard rent",
     "jurisdiction": "Maharashtra",
     "domain": "Rental & Property",
-    "keywords": ["ejectment", "eviction", "rent", "standard rent", "protection"],
+    "keywords": ["ejectment", "eviction", "rent", "standard rent", "protection", "forcible possession"],
     "content": "A landlord shall not be entitled to the recovery of possession of any premises so long as the tenant pays, or is ready and willing to pay, the amount of the standard rent and permitted increases, if any, and observes and performs the other conditions of the tenancy.",
-    "key_legal_takeaway": "Protecting tenants against arbitrary eviction as long as rent payments and essential contractual covenants are satisfied."
+    "key_legal_takeaway": "Protects tenants against arbitrary eviction as long as rent payments and essential contractual covenants are satisfied."
   },
   {
     "id": "mrca_sec_16",
@@ -72,6 +96,30 @@
     "key_legal_takeaway": "Eviction is permissible only under strict statutory grounds such as non-payment, unauthorized subletting, or genuine personal necessity."
   },
   {
+    "id": "mrca_sec_17",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 17",
+    "title": "Recovery of possession for repairs and re-entry rights",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["re-entry", "temporary possession", "repairs", "rebuilding"],
+    "content": "Where a landlord recovers possession of premises for the purpose of carrying out repairs or rebuilding, the tenant shall have the right to re-enter the premises upon completion of such repairs under original tenancy terms.",
+    "key_legal_takeaway": "Guarantees tenant right of re-entry after temporary possession taken by landlord for structural repairs."
+  },
+  {
+    "id": "mrca_sec_20",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 20",
+    "title": "Recovery of excess rent paid by tenant",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["refund excess rent", "overcharging", "illegal rent recovery"],
+    "content": "Any sum paid by a tenant on account of rent which is unlawful under this Act shall be recoverable by the tenant from the landlord who received it or his legal representative, and may be deducted by the tenant from any rent payable by him to such landlord.",
+    "key_legal_takeaway": "Tenants have a statutory right to recover or deduct any illegally overcharged rent from future monthly payments."
+  },
+  {
     "id": "mrca_sec_24",
     "act_name": "Maharashtra Rent Control Act, 1999",
     "act_short": "MRCA 1999",
@@ -79,9 +127,21 @@
     "title": "Landlord entitled to recover possession of premises given on license on expiry",
     "jurisdiction": "Maharashtra",
     "domain": "Rental & Property",
-    "keywords": ["licensee", "possession", "expiry", "licensor", "eviction", "leave and license", "lock-in"],
+    "keywords": ["licensee", "possession", "expiry", "licensor", "eviction", "leave and license", "lock-in", "holdover damages"],
     "content": "Notwithstanding anything contained in this Act, a licensee in possession or occupation of premises delivered to him on license for residential use shall deliver possession of such premises to the landlord on expiry of the period of license; and, on the failure of the licensee to so deliver the possession of the licensed premises, a landlord shall be entitled to recover possession of such premises by making an application to the Competent Authority. Any licensee who fails to deliver possession on expiry of license period shall be liable to pay damages at double the rate of license fee.",
-    "key_legal_takeaway": "Under Maharashtra Rent Control Act Section 24, a licensee must hand over possession upon expiry of license. Unlawful holdover attracts damages up to double the monthly license fee."
+    "key_legal_takeaway": "A licensee must hand over possession upon expiry of license. Unlawful holdover attracts damages up to double the monthly license fee."
+  },
+  {
+    "id": "mrca_sec_28",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 28",
+    "title": "Inspection of premises by landlord (Prior Notice Rule)",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["inspection", "prior notice", "landlord entry", "privacy", "reasonable hours"],
+    "content": "The landlord shall be entitled to inspect the premises let or given on license, at a reasonable time, after giving prior notice to the tenant or licensee.",
+    "key_legal_takeaway": "Landlord inspection requires prior written notice (minimum 24 to 48 hours) and must occur during reasonable daytime hours."
   },
   {
     "id": "mrca_sec_29",
@@ -93,7 +153,19 @@
     "domain": "Rental & Property",
     "keywords": ["essential supply", "water", "electricity", "cut off", "withhold", "amenities", "utility", "disconnection", "disconnect", "power"],
     "content": "No landlord either himself or through any person acting or purporting to act on his behalf shall without just or sufficient cause cut off or withhold any essential supply or service enjoyed by the tenant in respect of the premises let to him. Essential supply includes water, electricity, lights in passages and staircases, and sanitary services.",
-    "key_legal_takeaway": "Landlords are strictly prohibited from cutting off electricity, water, or basic amenities as a coercion tactic."
+    "key_legal_takeaway": "Landlords are strictly prohibited from cutting off electricity, water, or basic amenities as a coercion tactic under any pretext."
+  },
+  {
+    "id": "mrca_sec_30",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 30",
+    "title": "Penalties for cutting off essential utilities",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["penalty utility cutoff", "criminal offense", "imprisonment", "fine"],
+    "content": "Any landlord who contravenes the provisions of Section 29 shall, on conviction, be punished with imprisonment for a term which may extend to three months or with fine or with both.",
+    "key_legal_takeaway": "Utility cutoff is a cognizable criminal offense punishable by up to 3 months imprisonment and monetary fines."
   },
   {
     "id": "mrca_sec_55",
@@ -105,7 +177,31 @@
     "domain": "Rental & Property",
     "keywords": ["registration", "written agreement", "licensor", "penalty", "leave and license"],
     "content": "Notwithstanding anything contained in this Act or any other law for the time being in force, any agreement for leave and license or letting of any premises shall be in writing and shall be registered under the Registration Act, 1908. The responsibility of getting such agreement registered shall be upon the landlord. In the absence of a written registered agreement, the contention of the tenant about the terms and conditions shall prevail.",
-    "key_legal_takeaway": "Registration of Leave & License agreements is compulsory in Maharashtra. Responsibility lies on the landlord; failure means tenant/licensee terms prevail."
+    "key_legal_takeaway": "Registration of Leave & License agreements is compulsory in Maharashtra. Responsibility lies on the landlord; failure means tenant terms prevail."
+  },
+  {
+    "id": "mrca_sec_56",
+    "act_name": "Maharashtra Rent Control Act, 1999",
+    "act_short": "MRCA 1999",
+    "section": "Section 56",
+    "title": "Right of tenant and landlord to receive lawful consideration",
+    "jurisdiction": "Maharashtra",
+    "domain": "Rental & Property",
+    "keywords": ["relinquishment", "tenancy surrender", "consideration"],
+    "content": "It shall be lawful for the tenant to claim or receive an amount in consideration of relinquishment or transfer of his tenancy, provided such consideration is agreed upon in writing between landlord and tenant.",
+    "key_legal_takeaway": "Validates lawful financial consideration agreed between parties upon voluntary surrender or relinquishment of tenancy."
+  },
+  {
+    "id": "tpa_sec_53a",
+    "act_name": "Transfer of Property Act, 1882",
+    "act_short": "TPA 1882",
+    "section": "Section 53A",
+    "title": "Part Performance - Protection of Possession",
+    "jurisdiction": "India",
+    "domain": "Rental & Property",
+    "keywords": ["part performance", "protected possession", "equitable estoppel", "possession shield"],
+    "content": "Where any person contracts to transfer for consideration any immovable property by writing signed by him, and the transferee has, in part performance of the contract, taken possession of the property, the transferor shall be debarred from enforcing against the transferee any right in respect of the property other than a right expressly provided by the contract.",
+    "key_legal_takeaway": "Protects a tenant or transferee who has taken possession under a written contract against unlawful eviction or transferor claims."
   },
   {
     "id": "tpa_sec_105",
@@ -132,6 +228,18 @@
     "key_legal_takeaway": "Establishes default statutory notice periods of 15 days for monthly residential/commercial leases."
   },
   {
+    "id": "tpa_sec_107",
+    "act_name": "Transfer of Property Act, 1882",
+    "act_short": "TPA 1882",
+    "section": "Section 107",
+    "title": "Leases how made - Compulsory Registration",
+    "jurisdiction": "India",
+    "domain": "Rental & Property",
+    "keywords": ["compulsory registration", "lease 1 year", "registered instrument", "oral agreement"],
+    "content": "A lease of immovable property from year to year, or for any term exceeding one year, or reserving a yearly rent, can be made only by a registered instrument. All other leases of immovable property may be made either by a registered instrument or by oral agreement accompanied by delivery of possession.",
+    "key_legal_takeaway": "Leases exceeding 11 months or 1 year must be executed via a registered instrument under Indian law."
+  },
+  {
     "id": "tpa_sec_108",
     "act_name": "Transfer of Property Act, 1882",
     "act_short": "TPA 1882",
@@ -142,6 +250,18 @@
     "keywords": ["lessor", "lessee", "peaceful enjoyment", "subletting", "repairs", "maintenance"],
     "content": "The lessor is bound to disclose any material defect in the property and bound to bind himself to the covenant of quiet enjoyment. The lessee is bound to pay rent at the appointed time, maintain the property in good condition, and restore the property without unreasonable damage. The lessee may sub-let or transfer his interest unless expressly restricted by the lease contract.",
     "key_legal_takeaway": "Establishes mutual statutory obligations: lessor guarantees peaceful enjoyment; lessee is responsible for reasonable maintenance and timely payments."
+  },
+  {
+    "id": "tpa_sec_109",
+    "act_name": "Transfer of Property Act, 1882",
+    "act_short": "TPA 1882",
+    "section": "Section 109",
+    "title": "Rights of Lessor's Transferee (Sale during tenancy)",
+    "jurisdiction": "India",
+    "domain": "Rental & Property",
+    "keywords": ["sale of property", "new landlord", "transferee", "attornment"],
+    "content": "If the lessor transfers the property leased, or any part thereof, the transferee, in the absence of a contract to the contrary, shall possess all the rights, and, if the lessee so elects, be subject to all the liabilities of the lessor as to the property transferred.",
+    "key_legal_takeaway": "If landlord sells property during lease tenure, the new owner is bound by the existing tenancy agreement."
   },
   {
     "id": "tpa_sec_111",
@@ -156,6 +276,18 @@
     "key_legal_takeaway": "Termination of lease requires due compliance with notice terms or efflux of time; forfeiture requires clear notice of breach."
   },
   {
+    "id": "tpa_sec_114",
+    "act_name": "Transfer of Property Act, 1882",
+    "act_short": "TPA 1882",
+    "section": "Section 114",
+    "title": "Relief against forfeiture for non-payment of rent",
+    "jurisdiction": "India",
+    "domain": "Rental & Property",
+    "keywords": ["relief forfeiture", "grace period", "court discretion", "rent cure"],
+    "content": "Where a lease of immovable property has determined by forfeiture for non-payment of rent, and the lessor sues to eject the lessee, if the lessee pays or tenders to the lessor the rent in arrear, together with interest and full costs of suit within fifteen days, the Court may pass an order relieving the lessee against forfeiture.",
+    "key_legal_takeaway": "Courts grant equitable relief against forfeiture if rent default is cured within 15 days of legal proceeding."
+  },
+  {
     "id": "ica_sec_10",
     "act_name": "Indian Contract Act, 1872",
     "act_short": "ICA 1872",
@@ -168,6 +300,30 @@
     "key_legal_takeaway": "Every contract clause requires free consent, lawful object, and capacity to be enforceable."
   },
   {
+    "id": "ica_sec_15",
+    "act_name": "Indian Contract Act, 1872",
+    "act_short": "ICA 1872",
+    "section": "Section 15",
+    "title": "Coercion defined",
+    "jurisdiction": "India",
+    "domain": "Business & Commercial",
+    "keywords": ["coercion", "duress", "forced agreement", "threat"],
+    "content": "Coercion is the committing, or threatening to commit, any act forbidden by the Indian Penal Code, or the unlawful detaining, or threatening to detain, any property, to the prejudice of any person whatever, with the intention of causing any person to enter into an agreement.",
+    "key_legal_takeaway": "Clauses entered into under threats of property detention or physical coercion are voidable."
+  },
+  {
+    "id": "ica_sec_16",
+    "act_name": "Indian Contract Act, 1872",
+    "act_short": "ICA 1872",
+    "section": "Section 16",
+    "title": "Undue Influence defined",
+    "jurisdiction": "India",
+    "domain": "Business & Commercial",
+    "keywords": ["undue influence", "dominant position", "unconscionable clause", "one sided agreement"],
+    "content": "A contract is said to be induced by undue influence where the relations subsisting between the parties are such that one of the parties is in a position to dominate the will of the other and uses that position to obtain an unfair advantage over the other.",
+    "key_legal_takeaway": "Unconscionable or highly one-sided contracts where one party dominates negotiation power can be set aside for undue influence."
+  },
+  {
     "id": "ica_sec_23",
     "act_name": "Indian Contract Act, 1872",
     "act_short": "ICA 1872",
@@ -175,7 +331,7 @@
     "title": "What consideration and objects are lawful, and what not",
     "jurisdiction": "India",
     "domain": "Business & Commercial",
-    "keywords": ["unlawful consideration", "oppressive clause", "public policy", "void contract"],
+    "keywords": ["unlawful consideration", "oppressive clause", "public policy", "void contract", "forbidden by law"],
     "content": "The consideration or object of an agreement is lawful, unless it is forbidden by law, or is of such a nature that, if permitted, it would defeat the provisions of any law, or is fraudulent, or involves or implies injury to the person or property of another, or the Court regards it as immoral, or opposed to public policy.",
     "key_legal_takeaway": "Clauses that defeat statutory rights or violate public policy are void ab initio."
   },
@@ -199,9 +355,33 @@
     "title": "Agreements in restraint of legal proceedings void",
     "jurisdiction": "India",
     "domain": "Business & Commercial",
-    "keywords": ["restraint", "legal proceedings", "jurisdiction", "void clause", "court restriction"],
+    "keywords": ["restraint", "legal proceedings", "jurisdiction", "void clause", "court restriction", "unilateral arbitrator"],
     "content": "Every agreement by which any party thereto is restricted absolutely from enforcing his rights under or in respect of any contract, by the usual legal proceedings in the ordinary tribunals, or which limits the time within which he may thus enforce his rights, is void to that extent.",
     "key_legal_takeaway": "Clauses that completely prohibit a tenant or landlord from seeking legal recourse or court remedies are legally void."
+  },
+  {
+    "id": "ica_sec_56",
+    "act_name": "Indian Contract Act, 1872",
+    "act_short": "ICA 1872",
+    "section": "Section 56",
+    "title": "Agreement to do impossible act - Frustration & Force Majeure",
+    "jurisdiction": "India",
+    "domain": "Business & Commercial",
+    "keywords": ["frustration", "force majeure", "impossible act", "act of god", "epidemic"],
+    "content": "An agreement to do an act impossible in itself is void. A contract to do an act which, after the contract is made, becomes impossible, or, by reason of some event which the promisor could not prevent, unlawful, becomes void when the act becomes impossible or unlawful.",
+    "key_legal_takeaway": "Protects contracting parties when unforeseen supervening impossibility or force majeure renders performance impossible."
+  },
+  {
+    "id": "ica_sec_63",
+    "act_name": "Indian Contract Act, 1872",
+    "act_short": "ICA 1872",
+    "section": "Section 63",
+    "title": "Promisee may dispense with or remit performance of promise (Waiver)",
+    "jurisdiction": "India",
+    "domain": "Business & Commercial",
+    "keywords": ["waiver", "remit performance", "rent concession", "dispense"],
+    "content": "Every promisee may dispense with or remit, wholly or in part, the performance of the promise made to him, or may extend the time for such performance, or may accept instead of it any satisfaction which he thinks fit.",
+    "key_legal_takeaway": "Allows landlords/licensors to legally grant rent concessions, waivers, or payment timeline extensions."
   },
   {
     "id": "ica_sec_73",
@@ -225,6 +405,6 @@
     "domain": "Business & Commercial",
     "keywords": ["penalty", "liquidated damages", "breach", "forfeiture", "unreasonable penalty", "daily fine"],
     "content": "When a contract has been broken, if a sum is named in the contract as the amount to be paid in case of such breach, or if the contract contains any other stipulation by way of penalty, the party complaining of the breach is entitled, whether or not actual damage or loss is proved to have been caused thereby, to receive from the party who has broken the contract reasonable compensation not exceeding the amount so named or the penalty stipulated for.",
-    "key_legal_takeaway": "Excessive or oppressive daily penalties and total security deposit forfeitures are unenforceable. Courts and arbitrators award only reasonable compensation for actual loss under Section 74."
+    "key_legal_takeaway": "Excessive or oppressive daily penalties and total security deposit forfeitures are unenforceable. Courts award only reasonable compensation for actual loss."
   }
 ]
