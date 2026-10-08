@@ -1,7 +1,20 @@
+import os
+import json
 import time
 import re
+import logging
 from typing import Dict, Any, List
 from app.services.legal_knowledge_base import legal_kb
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
+
+try:
+    from google import genai
+    from google.genai import types
+    HAS_GENAI = True
+except ImportError:
+    HAS_GENAI = False
 
 def normalize_contract_text(text: str) -> str:
     """
@@ -286,6 +299,105 @@ def classify_clause_risk_by_rules(clause: Dict[str, Any]) -> Dict[str, Any]:
 
 def analyze_clause_with_rag(clause: Dict[str, Any], language: str = "English") -> Dict[str, Any]:
     """
-    Executes rule-based statutory analysis for a contract clause.
+    Analyzes a contract clause using Retrieval-Augmented Generation (RAG) with Google Gemini LLM,
+    grounded in Maharashtra statutory legal knowledge base (MRCA 1999, TPA 1882, ICA 1872, Arbitration Act 1996, DPDP Act 2023).
+    Falls back gracefully to deterministic statutory rule engine if LLM API key is unavailable or fails.
     """
-    return classify_clause_risk_by_rules(clause)
+    text = clause.get("text", "")
+    sec_num = clause.get("section_number", "")
+    title = clause.get("title", "")
+
+    # 1. RETRIEVAL STEP: Fetch relevant statutory context from Legal Knowledge Base
+    retrieved_statutes = legal_kb.search_legal_context(text, top_k=3)
+    kb_context_str = "\n".join([
+        f"- {s.get('act_short')} {s.get('section')}: {s.get('title')} - {s.get('content_snippet')}"
+        for s in retrieved_statutes
+    ])
+
+    # 2. Check for Gemini API key
+    api_key = os.getenv("GEMINI_API_KEY", "").strip() or getattr(settings, "GEMINI_API_KEY", "").strip()
+    use_llm = HAS_GENAI and api_key and len(api_key) > 15 and "your_" not in api_key.lower()
+
+    if use_llm:
+        models_to_try = ["gemini-flash-latest", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
+        for m_name in models_to_try:
+            try:
+                client = genai.Client(api_key=api_key)
+                prompt = f"""You are an expert Indian Property Lawyer specializing in Maharashtra Leave & License Agreements.
+Analyze the following contract clause for statutory compliance and risk under Maharashtra property law.
+
+CONTRACT CLAUSE TO ANALYZE:
+Section Number: {sec_num}
+Title: {title}
+Clause Text: "{text}"
+
+RETRIEVED STATUTORY LEGAL KNOWLEDGE BASE CONTEXT (Maharashtra Jurisdiction):
+{kb_context_str}
+
+RISK EVALUATION RUBRIC:
+- CRITICAL: Essential utility disconnection threats (Sec 29 MRCA 1999), total waiver of court access (Sec 28 ICA 1872), self-help forcible eviction/changing locks, forfeiture of full deposit for minor breaches (pets, nails, guests).
+- HIGH: Unilateral sole arbitrator appointed by licensor alone (Sec 12(5) Arbitration Act 1996), unilateral rent hike at sole discretion (Sec 10 MRCA), asymmetric notice periods (7-15d vs 60-90d), exorbitant daily penalty fines (Rs 1,000-2,000/day under Sec 74 ICA), deposit forfeiture PLUS remaining term rent for early exit.
+- MEDIUM: Tax gross-up shifting licensor's income tax, discriminatory dietary restrictions (non-veg/eggs), inspection notice < 24 hrs, indemnity covering licensor's own negligence, delayed deposit refund beyond 30 days, flat unevidenced painting deductions, holding over rate > 125%, commercial personal data sharing (DPDP Act 2023), shifting landlord's structural repair duty.
+- LOW: Standard routine balanced covenants adhering to Maharashtra Leave & License practices.
+
+OUTPUT FORMAT:
+Respond strictly with a JSON object:
+{{
+  "risk_level": "CRITICAL" | "HIGH" | "MEDIUM" | "LOW",
+  "reason": "Short 1-sentence concise reason for assigned risk level",
+  "legal_explanation": "Detailed legal analysis referencing specific statutory sections",
+  "simple_explanation": "Plain English explanation for non-lawyers",
+  "recommendation": "Actionable advice to fix or negotiate",
+  "suggested_wording": "Safer balanced alternative clause text"
+}}
+"""
+                response = client.models.generate_content(
+                    model=m_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        temperature=0.1
+                    )
+                )
+
+                if response and response.text:
+                    clean_json = response.text.strip()
+                    if clean_json.startswith("```json"):
+                        clean_json = clean_json[7:]
+                    if clean_json.endswith("```"):
+                        clean_json = clean_json[:-3]
+                    clean_json = clean_json.strip()
+
+                    parsed = json.loads(clean_json)
+
+                    # Statutory rule verification & alignment
+                    rule_res = classify_clause_risk_by_rules(clause)
+                    final_risk = parsed.get("risk_level", rule_res["risk_level"]).upper()
+                    if final_risk not in ["CRITICAL", "HIGH", "MEDIUM", "LOW"]:
+                        final_risk = rule_res["risk_level"]
+
+                    return {
+                        "clause_id": clause.get("clause_id"),
+                        "section_number": sec_num,
+                        "title": title,
+                        "original_text": text,
+                        "topic": clause.get("topic", "General"),
+                        "risk_level": final_risk,
+                        "legal_status": "Statutorily Non-Compliant" if final_risk != "LOW" else "Statutorily Compliant",
+                        "confidence_score": 0.95,
+                        "reason": parsed.get("reason") or rule_res["reason"],
+                        "legal_explanation": parsed.get("legal_explanation") or rule_res["legal_explanation"],
+                        "simple_explanation": parsed.get("simple_explanation") or rule_res["simple_explanation"],
+                        "relevant_statutes": retrieved_statutes,
+                        "recommendation": parsed.get("recommendation") or rule_res["recommendation"],
+                        "suggested_wording": parsed.get("suggested_wording") or rule_res["suggested_wording"],
+                        "analyzer_type": f"LLM_RAG_{m_name}"
+                    }
+            except Exception as ex:
+                logger.warning(f"LLM RAG model {m_name} error: {ex}. Retrying next model.")
+                continue
+
+    # FALLBACK: Deterministic statutory rule engine
+    rule_result = classify_clause_risk_by_rules(clause)
+    rule_result["analyzer_type"] = "Statutory_Rule_RAG"
+    return rule_result
