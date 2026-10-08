@@ -14,10 +14,11 @@ async def extract_document_endpoint(file: UploadFile = File(...)):
     filename = file.filename or "uploaded_contract.pdf"
     ext = filename.split('.')[-1].lower()
 
-    if ext not in ['pdf', 'docx', 'doc', 'txt']:
+    allowed_exts = ['pdf', 'docx', 'doc', 'txt', 'png', 'jpg', 'jpeg', 'tiff', 'bmp']
+    if ext not in allowed_exts:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported file format: .{ext}. Please upload a PDF, DOCX, or TXT legal document."
+            detail=f"Unsupported file format: .{ext}. Supported formats are PDF, DOCX, TXT, PNG, JPG, JPEG, and TIFF (scanned documents & images)."
         )
 
     file_bytes = await file.read()

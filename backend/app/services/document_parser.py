@@ -1,10 +1,14 @@
 import re
 import io
+import logging
 from typing import Dict, Any, List
 import pdfplumber
 from pypdf import PdfReader
 import docx
 from app.services.document_classifier import detect_document_type
+from app.services.ocr_service import perform_ocr_on_pdf_bytes, extract_text_from_image_bytes
+
+logger = logging.getLogger(__name__)
 
 def extract_legal_metrics(text: str) -> Dict[str, List[str]]:
     """Extract critical legal figures that MUST NOT be masked (monetary amounts, dates, rates, notice periods)."""
@@ -12,7 +16,7 @@ def extract_legal_metrics(text: str) -> Dict[str, List[str]]:
     percentages = list(set(re.findall(r'\b\d+(?:\.\d+)?\s*%', text)))
     notice_periods = list(set(re.findall(r'\b\d+\s*(?:day|month|week)s?\b(?:\s*notice)?', text, re.IGNORECASE)))
     dates = list(set(re.findall(r'\b(?:\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}|\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4})\b', text, re.IGNORECASE)))
-    
+
     return {
         "monetary_amounts": monetary_amounts,
         "percentages": percentages,
@@ -23,14 +27,14 @@ def extract_legal_metrics(text: str) -> Dict[str, List[str]]:
 def parse_pdf(file_bytes: bytes) -> Dict[str, Any]:
     full_text = ""
     tables = []
-    sections = []
+    ocr_used = False
 
     try:
         with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
             for i, page in enumerate(pdf.pages):
                 page_text = page.extract_text() or ""
                 full_text += f"\n--- Page {i+1} ---\n" + page_text
-                
+
                 # Extract tables
                 page_tables = page.extract_tables()
                 for t in page_tables:
@@ -43,9 +47,18 @@ def parse_pdf(file_bytes: bytes) -> Dict[str, Any]:
             page_text = page.extract_text() or ""
             full_text += f"\n--- Page {i+1} ---\n" + page_text
 
+    # Check if PDF contains scanned image pages with no selectable text
+    if not full_text or len(full_text.strip()) < 30:
+        logger.info("PDF appears to be a scanned document. Invoking OCR Engine...")
+        ocr_res = perform_ocr_on_pdf_bytes(file_bytes)
+        if ocr_res.get("text") and len(ocr_res["text"].strip()) > 10:
+            full_text = ocr_res["text"]
+            ocr_used = True
+
     return {
         "text": full_text.strip(),
-        "tables": tables
+        "tables": tables,
+        "ocr_used": ocr_used
     }
 
 def parse_docx(file_bytes: bytes) -> Dict[str, Any]:
@@ -62,7 +75,8 @@ def parse_docx(file_bytes: bytes) -> Dict[str, Any]:
 
     return {
         "text": full_text.strip(),
-        "tables": tables
+        "tables": tables,
+        "ocr_used": False
     }
 
 def parse_txt(file_bytes: bytes) -> Dict[str, Any]:
@@ -73,7 +87,17 @@ def parse_txt(file_bytes: bytes) -> Dict[str, Any]:
 
     return {
         "text": text.strip(),
-        "tables": []
+        "tables": [],
+        "ocr_used": False
+    }
+
+def parse_image(file_bytes: bytes) -> Dict[str, Any]:
+    logger.info("Invoking OCR Engine for image document...")
+    ocr_text = extract_text_from_image_bytes(file_bytes)
+    return {
+        "text": ocr_text.strip(),
+        "tables": [],
+        "ocr_used": True
     }
 
 def process_document(file_name: str, file_bytes: bytes) -> Dict[str, Any]:
@@ -85,13 +109,15 @@ def process_document(file_name: str, file_bytes: bytes) -> Dict[str, Any]:
         parsed_data = parse_docx(file_bytes)
     elif ext == 'txt':
         parsed_data = parse_txt(file_bytes)
+    elif ext in ['png', 'jpg', 'jpeg', 'tiff', 'bmp']:
+        parsed_data = parse_image(file_bytes)
     else:
-        raise ValueError(f"Unsupported file format: .{ext}. Supported formats are PDF, DOCX, and TXT.")
+        raise ValueError(f"Unsupported file format: .{ext}. Supported formats are PDF, DOCX, TXT, PNG, JPG, JPEG, and TIFF.")
 
     raw_text = parsed_data["text"]
 
     if not raw_text or len(raw_text.strip()) < 20:
-        raise ValueError("We could not extract meaningful content from this document. Please upload a readable legal document.")
+        raise ValueError("We could not extract meaningful text from this document via digital parsing or OCR. Please upload a clear legal document.")
 
     # Split into sections based on numbered titles or headings
     raw_sections = re.split(r'\n(?=(?:Clause|Section|Article|\d+\.|\b[A-Z\s]{4,}\b)\s)', raw_text)
@@ -106,8 +132,9 @@ def process_document(file_name: str, file_bytes: bytes) -> Dict[str, Any]:
         "total_char_count": len(raw_text),
         "total_sections": len(sections),
         "raw_text": raw_text,
-        "sections": sections[:50], # first 50 sections for efficiency
+        "sections": sections[:50],  # first 50 sections for efficiency
         "tables": parsed_data["tables"],
         "extracted_metrics": legal_metrics,
-        "document_type_info": doc_type_info
+        "document_type_info": doc_type_info,
+        "ocr_used": parsed_data.get("ocr_used", False)
     }

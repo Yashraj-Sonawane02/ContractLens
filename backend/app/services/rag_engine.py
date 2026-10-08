@@ -394,6 +394,10 @@ Respond strictly with a JSON object:
                         "analyzer_type": f"LLM_RAG_{m_name}"
                     }
             except Exception as ex:
+                err_str = str(ex)
+                if "RESOURCE_EXHAUSTED" in err_str or "429" in err_str:
+                    logger.warning(f"LLM API quota/rate-limit hit ({m_name}). Using instant statutory rule engine.")
+                    break
                 logger.warning(f"LLM RAG model {m_name} error: {ex}. Retrying next model.")
                 continue
 
